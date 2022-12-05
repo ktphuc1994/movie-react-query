@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import 'antd/dist/reset.css';
+import 'antd/dist/antd.css';
 import './App.css';
+
+import { Route, Routes } from 'react-router-dom';
+
+// import local Components
+import { Layout } from './core/HOC/Layout/Layout';
+import { PrivateRoutes } from './core/routes/PrivateRoutes';
+import { LoadingScreen } from './core/Components/LoadingScreen/LoadingScreen';
+import { LoginPage } from './Pages/RegisterAndLogin/LoginPage';
+import { RegisterPage } from './Pages/RegisterAndLogin/RegisterPage';
+import { HomePage } from './Pages/Home/HomePage';
+
+// import local components
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <LoadingScreen />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+
+          {/* Private routes */}
+          <Route element={<PrivateRoutes />}>
+            <Route index element={<HomePage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }
 
