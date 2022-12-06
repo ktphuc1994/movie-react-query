@@ -12,5 +12,10 @@ interface InterfaceMovie {
   dangChieu: boolean;
   sapChieu: boolean;
 }
+interface InterfaceBanner {
+  maBanner: number;
+  maPhim: number;
+  hinhAnh: string;
+}
 
-export type { InterfaceMovie };
+export type { InterfaceMovie, InterfaceBanner };

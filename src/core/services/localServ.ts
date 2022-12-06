@@ -10,6 +10,12 @@ const LOCAL_SERV = {
       );
       return userInfo ? JSON.parse(userInfo) : null;
     },
+    set: (userInfo: InterfaceUser): void => {
+      localStorage.setItem(
+        localConst.USER_LOCAL_STORE_KEY,
+        JSON.stringify(userInfo)
+      );
+    },
     unset: (): void => {
       localStorage.removeItem(localConst.USER_LOCAL_STORE_KEY);
     },

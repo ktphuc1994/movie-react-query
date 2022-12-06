@@ -3,4 +3,10 @@ interface InterfaceBaseProps {
   className?: string;
 }
 
-export type { InterfaceBaseProps };
+interface InterfaceNotifyModal extends InterfaceBaseProps {
+  isNotifyModalOpen: boolean;
+  handleCancelClick: () => void;
+  handleOKClick: () => void;
+}
+
+export type { InterfaceBaseProps, InterfaceNotifyModal };

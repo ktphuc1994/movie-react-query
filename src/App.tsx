@@ -1,5 +1,4 @@
 import 'antd/dist/reset.css';
-import 'antd/dist/antd.css';
 import './App.css';
 
 import { Route, Routes } from 'react-router-dom';
@@ -8,9 +7,9 @@ import { Route, Routes } from 'react-router-dom';
 import { Layout } from './core/HOC/Layout/Layout';
 import { PrivateRoutes } from './core/routes/PrivateRoutes';
 import { LoadingScreen } from './core/Components/LoadingScreen/LoadingScreen';
-import { LoginPage } from './Pages/RegisterAndLogin/LoginPage';
+import LoginPage from './Pages/RegisterAndLogin/LoginPage';
 import { RegisterPage } from './Pages/RegisterAndLogin/RegisterPage';
-import { HomePage } from './Pages/Home/HomePage';
+import HomePage from './Pages/Home/HomePage';
 
 // import local components
 
