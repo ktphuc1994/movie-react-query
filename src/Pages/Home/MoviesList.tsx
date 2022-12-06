@@ -72,8 +72,7 @@ const MoviesList = ({ moviesList }: InterfaceMovieListComponent) => {
     </>
   );
   return (
-    <div className="my-10">
-      <h3 className="font-semibold text-white text-2xl">DANH SÁCH PHIM</h3>
+    <div className="mb-10">
       <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
         {moviesList.map((movie, index) => (
           <div key={movie.maPhim.toString() + index}>

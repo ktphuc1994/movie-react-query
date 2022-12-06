@@ -19,4 +19,5 @@ export const webColor = {
       cursor: 'pointer',
     },
   },
+  spinnerPrimary: '#e53e3e',
 };

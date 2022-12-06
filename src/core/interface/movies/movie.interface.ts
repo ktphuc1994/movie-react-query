@@ -1,3 +1,10 @@
+interface InterfaceTheaterChain {
+  maHeThongRap: string;
+  tenHeThongRap: string;
+  biDanh: string;
+  logo: string;
+}
+
 interface InterfaceMovie {
   maPhim: number;
   tenPhim: string;
@@ -18,4 +25,4 @@ interface InterfaceBanner {
   hinhAnh: string;
 }
 
-export type { InterfaceMovie, InterfaceBanner };
+export type { InterfaceMovie, InterfaceBanner, InterfaceTheaterChain };

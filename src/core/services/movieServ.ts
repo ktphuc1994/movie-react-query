@@ -8,7 +8,7 @@ const MOVIE_SERV = {
     const { data } = await AXIOS_INSTANCE_GENERATOR(
       localConst.BASE_MOVIE_URL()
     ).get(`/LayDanhSachPhim?maNhom=${localConst.maNhom}`);
-    return data;
+    return data.content;
   },
 };
 

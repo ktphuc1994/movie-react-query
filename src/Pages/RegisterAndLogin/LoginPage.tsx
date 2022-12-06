@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+// import react query
+import { useQueryClient } from '@tanstack/react-query';
+
 // import local services
 import LOCAL_SERV from '../../core/services/localServ';
 import userServ from '../../core/services/userServ';
@@ -24,6 +27,8 @@ const LoginPage = () => {
   const [errMessage, setErrMessage] = useState<string>('');
   let navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
   // Notification
   type NotificationType = 'success' | 'info' | 'warning' | 'error';
   const openNotification = (type: NotificationType) => {
@@ -44,7 +49,8 @@ const LoginPage = () => {
       .postLogin(values)
       .then((res) => {
         // console.log(res);
-        LOCAL_SERV.user.set(res.content);
+        LOCAL_SERV.user.set(res);
+        queryClient.invalidateQueries(['localUser']);
         openNotification('success');
         setTimeout(() => {
           navigate('/');
