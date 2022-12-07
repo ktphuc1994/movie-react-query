@@ -8,11 +8,11 @@ import MoviesList from './MoviesList';
 import InnerSpinner from '../../core/Components/Spinners/InnerSpinner';
 
 const HomePage = () => {
-  let {
+  const {
     isLoading,
+    isFetching,
     isError,
     data: moviesList,
-    isFetching,
   } = useQuery(['moviesList'], MOVIE_SERV.getMovieList, {
     staleTime: 3600000,
     cacheTime: 3600000,

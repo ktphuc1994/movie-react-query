@@ -74,11 +74,13 @@ const MoviesList = ({ moviesList }: InterfaceMovieListComponent) => {
   return (
     <div className="mb-10">
       <div className="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
-        {moviesList.map((movie, index) => (
-          <div key={movie.maPhim.toString() + index}>
-            {renderMovieItem(movie)}
-          </div>
-        ))}
+        {moviesList
+          ? moviesList.map((movie, index) => (
+              <div key={movie.maPhim.toString() + index}>
+                {renderMovieItem(movie)}
+              </div>
+            ))
+          : null}
       </div>
     </div>
   );

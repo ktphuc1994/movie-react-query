@@ -59,7 +59,11 @@ const LoginPage = () => {
       .catch((err) => {
         console.log(err);
         setIsNotifyModalOpen(true);
-        setErrMessage(err.response.data.content);
+        if (err.response.data.content) {
+          setErrMessage(err.response.data.content);
+        } else {
+          setErrMessage('Unidentified Error. Please try again later');
+        }
       });
   };
 
