@@ -1,12 +1,9 @@
 interface InterfaceUser {
   taiKhoan: string;
-  matKhau?: string;
+  hoTen: string;
   email: string;
   soDt: string;
-  maNhom: string;
   maLoaiNguoiDung: string;
-  hoTen: string;
-  accessToken?: string;
 }
 
 export type { InterfaceUser };

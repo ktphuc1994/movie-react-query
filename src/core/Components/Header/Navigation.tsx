@@ -39,7 +39,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: (
-      <NavLink to="/underDeveloped" className="align-middle">
+      <NavLink to="/under-development" className="align-middle">
         <span className="nav-left__item text-lg md:text-xl">Food & Drinks</span>
       </NavLink>
     ),

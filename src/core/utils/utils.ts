@@ -1,5 +1,3 @@
-import { notification } from 'antd';
-
 export const hideLongString = (string: String, length: number) => {
   if (string.length > length) {
     return string.slice(0, length) + '...';
@@ -15,7 +13,7 @@ export const enterToActive = (
   selectorBtn: keyof HTMLElementTagNameMap
 ) => {
   document.querySelector(selectorInput)!.addEventListener('keyup', (e) => {
-    let keyboardEvent = <KeyboardEvent>e;
+    let keyboardEvent = e as KeyboardEvent;
     if (keyboardEvent.key === 'Enter') {
       document.querySelector(selectorBtn)!.click();
     }

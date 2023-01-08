@@ -24,8 +24,8 @@ const Footer = () => {
         <img
           className="w-16 h-16"
           src={chain.logo}
-          alt={chain.biDanh}
-          key={chain.biDanh.toString() + index}
+          alt={chain.maHeThongRap}
+          key={chain.maHeThongRap.toString() + index}
         />
       );
     });

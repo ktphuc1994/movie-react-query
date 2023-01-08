@@ -1,18 +1,9 @@
-interface InterfaceTheaterChain {
-  maHeThongRap: string;
-  tenHeThongRap: string;
-  biDanh: string;
-  logo: string;
-}
-
 interface InterfaceMovie {
   maPhim: number;
   tenPhim: string;
-  biDanh: string;
   trailer: string;
   hinhAnh: string;
   moTa: string;
-  maNhom: string;
   ngayKhoiChieu: Date;
   danhGia: number;
   hot: boolean;
@@ -25,4 +16,4 @@ interface InterfaceBanner {
   hinhAnh: string;
 }
 
-export type { InterfaceMovie, InterfaceBanner, InterfaceTheaterChain };
+export type { InterfaceMovie, InterfaceBanner };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 // import react query
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // import local services
 import LOCAL_SERV from '../../core/services/localServ';
@@ -42,17 +42,18 @@ const LoginPage = () => {
     });
   };
 
-  let localUser = LOCAL_SERV.user.get();
+  const { data: user } = useQuery(['user'], userServ.getUserInfo, {
+    staleTime: 3600000,
+  });
 
-  const onFinish = (values: { taiKhoan: string; matKhau: string }) => {
+  const onFinish = (values: { email: string; matKhau: string }) => {
     userServ
       .postLogin(values)
       .then((res) => {
-        // console.log(res);
-        LOCAL_SERV.user.set(res);
-        queryClient.invalidateQueries(['localUser']);
+        LOCAL_SERV.token.set(res);
         openNotification('success');
         setTimeout(() => {
+          queryClient.invalidateQueries(['user']);
           navigate('/');
         }, 1500);
       })
@@ -62,7 +63,7 @@ const LoginPage = () => {
         if (err.response.data.content) {
           setErrMessage(err.response.data.content);
         } else {
-          setErrMessage('Unidentified Error. Please try again later');
+          setErrMessage('Unexpected Error. Please try again later');
         }
       });
   };
@@ -79,8 +80,7 @@ const LoginPage = () => {
   const renderAlreadyLoginPage = () => (
     <div className="text-center">
       <p className="mb-5 text-3xl">
-        Xin chào{' '}
-        <span className="font-bold text-red-500">{localUser?.hoTen}</span>
+        Xin chào <span className="font-bold text-red-500">{user?.hoTen}</span>
       </p>
       <p className="text-2xl">Bạn đã đăng nhập thành công</p>
       <button
@@ -99,7 +99,7 @@ const LoginPage = () => {
     <>
       <div className="text-white" style={{ background: webColor.bgPrimary }}>
         <div className="container mx-auto w-screen h-screen flex justify-center items-center">
-          {localUser ? (
+          {user ? (
             renderAlreadyLoginPage()
           ) : (
             <>
@@ -118,11 +118,11 @@ const LoginPage = () => {
                     onFinish={onFinish}
                   >
                     <Form.Item
-                      name="taiKhoan"
+                      name="email"
                       rules={[
                         {
                           required: true,
-                          message: 'Vui lòng nhập tài khoản!',
+                          message: 'Vui lòng nhập email!',
                         },
                       ]}
                     >
@@ -130,7 +130,7 @@ const LoginPage = () => {
                         prefix={
                           <UserOutlined className="site-form-item-icon" />
                         }
-                        placeholder="Tài khoản"
+                        placeholder="Email"
                         size="large"
                       />
                     </Form.Item>
@@ -166,13 +166,11 @@ const LoginPage = () => {
                         Đăng nhập
                       </Button>
                       Or{' '}
-                      <NavLink to="/register">
-                        <a
-                          href=""
-                          className="text-[16px] text-red-500 hover:text-red-400"
-                        >
-                          Đăng ký
-                        </a>
+                      <NavLink
+                        className="text-[16px] text-red-500 hover:text-red-400"
+                        to="/register"
+                      >
+                        Đăng ký
                       </NavLink>
                     </Form.Item>
                   </Form>

@@ -12,6 +12,7 @@ import NotifyModal from '../Utils/NotifyModal';
 
 // import ANTD Components
 import { message } from 'antd';
+import userServ from '../../services/userServ';
 
 const UserNav = () => {
   const navigate = useNavigate();
@@ -20,27 +21,27 @@ const UserNav = () => {
   // let dispatch = useDispatch();
   // let user = useSelector((state) => state.userSlice.user);
   const queryClient = useQueryClient();
-  const localUser = useQuery(['localUser'], LOCAL_SERV.user.get, {
+  const user = useQuery(['user'], userServ.getUserInfo, {
     staleTime: 3600000,
   });
 
   let handleLogOut = () => {
-    LOCAL_SERV.user.unset();
-    queryClient.invalidateQueries(['localUser']);
+    LOCAL_SERV.token.unset();
+    queryClient.invalidateQueries(['user']);
     setNotifyModalOpen(false);
     message.success('Đăng xuất thành công', 2);
     navigate('/');
   };
 
   let renderContent = () => {
-    if (localUser.data) {
+    if (user.data) {
       return (
         <div className="flex flex-col justify-center text-center">
           <span className="text-white text-[16px] md:text-lg">
             Xin chào{' '}
             <NavLink to="/profile" className="group inline-block ml-2">
               <span className="font-bold text-lg md:text-xl text-red-500 group-hover:text-indigo-500 transition-all duration-700">
-                {localUser.data.hoTen}
+                {user.data.hoTen}
               </span>
             </NavLink>
           </span>

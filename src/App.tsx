@@ -10,6 +10,8 @@ import { LoadingScreen } from './core/Components/LoadingScreen/LoadingScreen';
 import LoginPage from './Pages/RegisterAndLogin/LoginPage';
 import { RegisterPage } from './Pages/RegisterAndLogin/RegisterPage';
 import HomePage from './Pages/Home/HomePage';
+import UnderDevelopedPage from './Pages/UnderDevelopedPage/UnderDevelopedPage';
+import BookingPage from './Pages/BookingPage/BookingPage';
 
 // import local components
 
@@ -19,13 +21,14 @@ function App() {
       <LoadingScreen />
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="under-development" element={<UnderDevelopedPage />} />
+          <Route path="booking/:maPhim" element={<BookingPage />} />
 
           {/* Private routes */}
-          <Route element={<PrivateRoutes />}>
-            <Route index element={<HomePage />} />
-          </Route>
+          <Route element={<PrivateRoutes />}></Route>
         </Route>
       </Routes>
     </>

@@ -22,7 +22,11 @@ const HomePage = () => {
     <>
       <div className="container xl:max-w-screen-xl mx-auto">
         <h3 className="mt-10 font-semibold text-2xl">DANH SÁCH PHIM</h3>
-        {isLoading ? <InnerSpinner /> : <MoviesList moviesList={moviesList} />}
+        {isLoading || isFetching ? (
+          <InnerSpinner />
+        ) : (
+          <MoviesList moviesList={moviesList} />
+        )}
       </div>
     </>
   );

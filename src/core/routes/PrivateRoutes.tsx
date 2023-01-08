@@ -5,7 +5,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 import LOCAL_SERV from '../services/localServ';
 
 export const PrivateRoutes = () => {
-  // const userInfo = LOCAL_SERV.user.get();
-  // return userInfo ? <Outlet /> : <Navigate to={'login'} />;
-  return <Outlet />;
+  const token = LOCAL_SERV.token.get();
+  return token ? <Outlet /> : <Navigate to={'login'} />;
 };

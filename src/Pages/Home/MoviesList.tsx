@@ -32,7 +32,7 @@ const MoviesList = ({ moviesList }: InterfaceMovieListComponent) => {
         cover={
           <NavLink to={`/detail/${movie.maPhim}`}>
             <img
-              alt={movie.biDanh}
+              alt={movie.maPhim.toString()}
               src={movie.hinhAnh}
               style={{ width: '100%', height: '300px', objectFit: 'cover' }}
               className="hover:scale-105 transition duration-300"

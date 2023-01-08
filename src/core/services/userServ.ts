@@ -3,16 +3,31 @@ import { AXIOS_INSTANCE_GENERATOR } from './configURL';
 // import local constants
 import localConst from '../constants/localConst';
 import { InterfaceUser } from '../interface/user/user.interface';
+import LOCAL_SERV from './localServ';
 
 const userServ = {
   postLogin: async (loginInfo: {
-    taiKhoan: string;
+    email: string;
     matKhau: string;
-  }): Promise<InterfaceUser> => {
-    const { data } = await AXIOS_INSTANCE_GENERATOR(
-      localConst.BASE_USER_URL()
-    ).post('/DangNhap', loginInfo);
-    return data.content;
+  }): Promise<string> => {
+    const { data } = await AXIOS_INSTANCE_GENERATOR(localConst.BASE_URL).post(
+      '/api/login',
+      loginInfo
+    );
+    return data.content.Authorization;
+  },
+
+  postRegister: async () => {},
+
+  getUserInfo: async (): Promise<InterfaceUser | null> => {
+    const token = LOCAL_SERV.token.get();
+    if (token) {
+      const { data } = await AXIOS_INSTANCE_GENERATOR(
+        localConst.BASE_USER_URL()
+      ).get('/ThongTinTaiKhoan');
+      return data.content;
+    }
+    return null;
   },
 };
 
