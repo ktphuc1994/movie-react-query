@@ -1,27 +1,37 @@
 import { InterfaceMovie } from '../movies/movie.interface';
 import { InterfaceHeThongRap } from '../theatres/theatre.interface';
 
-interface InterfaceLichChieuPhim {
+export interface InterfaceLichChieuPhim {
   maLichChieu: number;
   maRap: number;
   tenRap: string;
   ngayGioChieu: string;
 }
 
-interface InterfaceShowtimeInfo extends InterfaceMovie {
+export interface InterfaceShowtimeInfo extends InterfaceMovie {
   heThongRap: InterfaceHeThongRap[];
 }
 
-interface InterfaceSeatInfo {
+export interface InterfaceSeatInfo {
   maGhe: number;
   tenGhe: string;
   loaiGhe: string;
+  maRap: number;
   giaVe: number;
-  daDate: boolean;
+  daDat: boolean;
   taiKhoan: number;
 }
-export type {
-  InterfaceLichChieuPhim,
-  InterfaceShowtimeInfo,
-  InterfaceSeatInfo,
-};
+
+export interface InterfaceScheduleInfo {
+  maLichChieu: number;
+  tenCumRap: string;
+  diaChi: string;
+  tenRap: string;
+  tenPhim: string;
+  hinhAnh: string;
+  ngayGioChieu: string;
+}
+
+export interface InterfaceSchedule extends InterfaceScheduleInfo {
+  danhSachGhe: InterfaceSeatInfo[];
+}

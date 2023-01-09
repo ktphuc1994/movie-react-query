@@ -1,26 +1,30 @@
-import React from "react";
-import { webColor } from "../../../constants/colorConstant";
+// import local interfaces
+import { InterfaceSeatDetailsComponent } from '../../../core/interface/booking/bookingComponent.interface';
+
+// import local constants
+import { webColor } from '../../../core/constants/colorConst';
 
 export default function SeatDetails({
   seatInfo,
   handleSelectSeat,
   selectedSeatList,
-}) {
-  let selectedSeatIndex = selectedSeatList.findIndex(
-    (item) => item.maGhe === seatInfo.maGhe
+}: InterfaceSeatDetailsComponent) {
+  const selectedSeatIndex = selectedSeatList.findIndex(
+    (item) => item.maGhe === seatInfo.maGhe,
   );
-  let seatStatus = () => {
+  const seatStatus = () => {
     if (seatInfo.daDat === true) {
       return webColor.seat.booked;
     }
     if (selectedSeatIndex !== -1) {
       return webColor.seat.selected;
     }
-    if (seatInfo.loaiGhe === "Thuong") {
+    if (seatInfo.loaiGhe === 'Regular') {
       return webColor.seat.regular;
     }
     return webColor.seat.vip;
   };
+
   return (
     <div
       className="p-0 md:p-1 flex justify-center items-center"

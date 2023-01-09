@@ -12,6 +12,8 @@ import { RegisterPage } from './Pages/RegisterAndLogin/RegisterPage';
 import HomePage from './Pages/Home/HomePage';
 import UnderDevelopedPage from './Pages/UnderDevelopedPage/UnderDevelopedPage';
 import BookingPage from './Pages/BookingPage/BookingPage';
+import SelectSeat from './Pages/BookingPage/SelectSeat/SelectSeat';
+import BookingConfirmation from './Pages/BookingPage/BookingConfirmation';
 
 // import local components
 
@@ -28,7 +30,13 @@ function App() {
           <Route path="booking/:maPhim" element={<BookingPage />} />
 
           {/* Private routes */}
-          <Route element={<PrivateRoutes />}></Route>
+          <Route element={<PrivateRoutes />}>
+            <Route path="select-seat/:maLichChieu" element={<SelectSeat />} />
+            <Route
+              path="booking-confirm/:maLichChieu"
+              element={<BookingConfirmation />}
+            />
+          </Route>
         </Route>
       </Routes>
     </>

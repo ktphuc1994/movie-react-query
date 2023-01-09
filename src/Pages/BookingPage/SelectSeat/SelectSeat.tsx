@@ -1,81 +1,95 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import NotifyModal from "../../../../HOC/NotifyModal";
-import { movieServ } from "../../../../services/movieServ";
-import { webColor } from "../../../constants/colorConstant";
-import { setIsLoading } from "../../../redux/slices/generalSlice";
-import {
-  setSelectedMovieInfo,
-  setSelectedSeatList,
-} from "../../../redux/slices/movieSlice";
-import SeatDetails from "./SeatDetails";
-import SelectedDetailTickets from "./SelectedDetailTickets";
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+// import react query
+import { useQuery } from '@tanstack/react-query';
+
+// import other library
+import moment from 'moment';
+
+// import local components
+import SeatDetails from './SeatDetails';
+import SelectedDetailTickets from './SelectedDetailTickets';
+import NotifyModal from '../../../core/Components/Utils/NotifyModal';
+
+// import local interface
+import { InterfaceSeatInfo } from '../../../core/interface/booking/booking.interface';
+
+// import local services
+import MOVIE_SERV from '../../../core/services/movieServ';
+
+// import local constants
+import { webColor } from '../../../core/constants/colorConst';
 
 export default function SelectSeat() {
-  let [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
-  let [seatsList, setSeatsList] = useState(null);
-  let [scheduleInfo, setScheduleInfo] = useState(null);
-  let params = useParams();
-  let dispatch = useDispatch();
-  let selectedSeatList = useSelector((state) => {
-    return state.movieSlice.selectedSeatList;
-  });
+  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
+  // let [seatsList, setSeatsList] = useState(null);
+  // let [scheduleInfo, setScheduleInfo] = useState(null);
+  const { maLichChieu } = useParams();
+  const [selectedSeatList, setSelectedSeatList] = useState<InterfaceSeatInfo[]>(
+    [],
+  );
 
   // Lấy thông tin lịch chiếu theo mã lịch chiếu
-  useEffect(() => {
-    dispatch(setIsLoading(true));
-    movieServ
-      .getScheduleDetails(params.maLichChieu)
-      .then((res) => {
-        // console.log("res");
-        setSeatsList(
-          res.data.content.danhSachGhe.map(
-            (seat) => (seat = { ...seat, selected: false })
-          )
-        );
-        setScheduleInfo(res.data.content.thongTinPhim);
-        dispatch(setSelectedSeatList([]));
-        dispatch(setSelectedMovieInfo(null));
-        dispatch(setIsLoading(false));
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(setIsLoading(false));
-      });
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setIsLoading(true));
+  //   movieServ
+  //     .getScheduleDetails(params.maLichChieu)
+  //     .then((res) => {
+  //       // console.log("res");
+  //       setSeatsList(
+  //         res.data.content.danhSachGhe.map((seat) => ({
+  //           ...seat,
+  //           selected: false,
+  //         })),
+  //       );
+  //       setScheduleInfo(res.data.content.thongTinPhim);
+  //       dispatch(setSelectedSeatList([]));
+  //       dispatch(setSelectedMovieInfo(null));
+  //       dispatch(setIsLoading(false));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       dispatch(setIsLoading(false));
+  //     });
+  // }, []);
+  const { data } = useQuery(['schedule', maLichChieu], () =>
+    MOVIE_SERV.getScheduleDetail(maLichChieu!),
+  );
+  if (!data) return null;
 
+  const { danhSachGhe, ...scheduleInfo } = data;
   // HANDLE Notify Modal
-  let handleOKClick = () => {
+  const handleOKClick = () => {
     setIsNotifyModalOpen(false);
   };
-  let handleCancelClick = () => {
+  const handleCancelClick = () => {
     setIsNotifyModalOpen(false);
   };
 
   // HANDLE chọn ghế
-  let handleSelectSeat = (seatInfo) => {
+  const handleSelectSeat = (seatInfo: InterfaceSeatInfo) => {
     let newSelectedSeatList = [...selectedSeatList];
     if (seatInfo.daDat) return;
-    let selectedSeatIndex = newSelectedSeatList.findIndex(
-      (item) => item.maGhe === seatInfo.maGhe
+    const selectedSeatIndex = newSelectedSeatList.findIndex(
+      (item) => item.maGhe === seatInfo.maGhe,
     );
     if (selectedSeatIndex === -1) {
       newSelectedSeatList.push(seatInfo);
-      dispatch(setSelectedSeatList(newSelectedSeatList));
+      setSelectedSeatList(newSelectedSeatList);
       return;
     }
     newSelectedSeatList.splice(selectedSeatIndex, 1);
-    dispatch(setSelectedSeatList(newSelectedSeatList));
+    setSelectedSeatList(newSelectedSeatList);
   };
 
   // Render danh sách ghế ra màn hình
-  let renderSeats = () => {
+  const renderSeats = () => {
     // console.log("run 2");
     return (
       <>
         <div className="max-w-xl mx-auto p-5 sm:p-0 grid grid-cols-16 gap-2">
-          {seatsList?.map((seatInfo, index) => (
+          {danhSachGhe.map((seatInfo, index) => (
             <SeatDetails
               key={seatInfo.maGhe.toString() + index}
               seatInfo={seatInfo}
@@ -107,7 +121,6 @@ export default function SelectSeat() {
   };
   // console.log("run");
   // console.log(selectedSeatList);
-  if (!scheduleInfo) return null;
   return (
     <>
       <div className="container xl:max-w-screen-xl mx-auto px-2 sm:px-0">
@@ -122,9 +135,9 @@ export default function SelectSeat() {
             </p>
             <p className="text-white/80">{scheduleInfo.diaChi}</p>
             <p className="mb-0 text-lg text-white/80">
-              Xuất chiếu:{" "}
+              Xuất chiếu:{' '}
               <span className="text-white font-semibold">
-                {scheduleInfo.gioChieu} {scheduleInfo.ngayChieu}
+                {moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY hh:mm')}
               </span>
             </p>
           </div>
@@ -132,9 +145,6 @@ export default function SelectSeat() {
             <p className="py-2 px-5 bg-gray-600 text-center text-lg font-semibold text-white">
               Chọn ghế
             </p>
-            {/* <p className="py-2 text-center text-xl font-semibold text-gray-500">
-            Màn hình
-          </p> */}
             <div className="px-5">
               <img
                 className="w-full mt-8 mb-12"

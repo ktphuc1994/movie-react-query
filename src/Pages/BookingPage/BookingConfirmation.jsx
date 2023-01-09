@@ -1,16 +1,16 @@
-import { message } from "antd";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { movieServ } from "../../../services/movieServ";
-import { numberWithCommas } from "../../../utils/utils";
-import { setIsLoading } from "../../redux/slices/generalSlice";
+import { message } from 'antd';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { movieServ } from '../../../services/movieServ';
+import { numberWithCommas } from '../../../utils/utils';
+import { setIsLoading } from '../../redux/slices/generalSlice';
 import {
   setSelectedMovieInfo,
   setSelectedSeatList,
-} from "../../redux/slices/movieSlice";
-import BookingSuccess from "./BookingSuccess";
-import { bookingUtils } from "./bookingUtils";
+} from '../../redux/slices/movieSlice';
+import BookingSuccess from './BookingSuccess';
+import { bookingUtils } from './bookingUtils';
 
 export default function BookingConfirmation() {
   let params = useParams();
@@ -19,10 +19,10 @@ export default function BookingConfirmation() {
 
   let [isBookingSuccessOpen, setIsBookingSuccessOpen] = useState(false);
   let selectedSeatList = useSelector(
-    (state) => state.movieSlice.selectedSeatList
+    (state) => state.movieSlice.selectedSeatList,
   );
   let selectedMovieInfo = useSelector(
-    (state) => state.movieSlice.selectedMovieInfo
+    (state) => state.movieSlice.selectedMovieInfo,
   );
 
   useEffect(() => {
@@ -35,11 +35,11 @@ export default function BookingConfirmation() {
     selectedSeatList.reduce((total, item) => total + item.giaVe, 0);
 
   let handleCloseBookingSuccess = () => {
-    message.success("Chuyển hướng về Trang chủ", 2);
+    message.success('Chuyển hướng về Trang chủ', 2);
     setTimeout(() => {
       dispatch(setSelectedSeatList([]));
       dispatch(setSelectedMovieInfo(null));
-      navigate("/");
+      navigate('/');
     }, 2000);
   };
 
@@ -78,7 +78,7 @@ export default function BookingConfirmation() {
                 {item.tenGhe}
               </td>
               <td className="py-4 px-6">
-                {item.loaiGhe === "Thuong" ? "Thường" : "VIP"}
+                {item.loaiGhe === 'Thuong' ? 'Thường' : 'VIP'}
               </td>
               <td className="py-4 px-6">{numberWithCommas(item.giaVe)} đ</td>
               <td className="py-4 px-6">{numberWithCommas(item.giaVe)} đ</td>
@@ -134,13 +134,13 @@ export default function BookingConfirmation() {
             <p className="mb-2 text-white/80">{selectedMovieInfo.diaChi}</p>
             <p className="mb-0 text-lg">{selectedMovieInfo.tenRap}</p>
             <p className="mb-0 text-white/70 text-[16px]">
-              Ghế:{" "}
+              Ghế:{' '}
               <span className="font-semibold text-lg text-white">
                 {bookingUtils.renderSelectedSeat(selectedSeatList)}
               </span>
             </p>
             <p className="mb-2 text-white/70 text-[16px]">
-              Xuất chiếu:{" "}
+              Xuất chiếu:{' '}
               <span className="font-semibold text-lg text-white">
                 {selectedMovieInfo.gioChieu} {selectedMovieInfo.ngayChieu}
               </span>

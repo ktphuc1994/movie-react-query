@@ -1,10 +1,13 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 // import react query
 import { useQuery } from '@tanstack/react-query';
 
 // import ANTD component
 import { Tabs, Tag } from 'antd';
+
+// import local components
+import InnerSpinner from '../../core/Components/Spinners/InnerSpinner';
 
 // import movie services
 import MOVIE_SERV from '../../core/services/movieServ';
@@ -18,6 +21,7 @@ import moment from 'moment';
 
 export default function BookingPage() {
   const { maPhim } = useParams();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   dispatch(setIsLoading(true));
@@ -51,7 +55,7 @@ export default function BookingPage() {
     console.log(key);
   };
   let handleChonPhimKhac = () => {
-    window.location.href = '/';
+    navigate('/');
   };
 
   const renderTheatreChains = () => {
@@ -109,7 +113,9 @@ export default function BookingPage() {
   const getDatesList = (showtimeList: InterfaceLichChieuPhim[]) => {
     // if (!showtimeList) return;
     return showtimeList.reduce<Array<string>>((datesList, showtime) => {
-      const currDate = moment(showtime.ngayGioChieu).format('YYYY-MM-DD');
+      const currDate: string = moment(showtime.ngayGioChieu).format(
+        'YYYY-MM-DD',
+      );
       const isDateInList = datesList.includes(currDate);
       if (!isDateInList) {
         return [...datesList, currDate];
@@ -119,7 +125,7 @@ export default function BookingPage() {
   };
 
   const renderDatesList = (showtimeList: InterfaceLichChieuPhim[]) => {
-    console.log(showtimeList);
+    // console.log(showtimeList);
     const datesList = getDatesList(showtimeList);
     return (
       <Tabs
@@ -155,7 +161,7 @@ export default function BookingPage() {
     <div>
       {showHoursList.map((showHour, index) => (
         <NavLink
-          to={`/selectseat/${showHour.maLichChieu}`}
+          to={`/select-seat/${showHour.maLichChieu}`}
           key={showHour.maLichChieu.toString() + index}
         >
           <button className="px-5 py-2.5 m-2 border rounded-lg border-white/50 hover:border-white font-medium text-[16px] sm:text-lg text-center text-white/50 hover:text-white">
@@ -169,7 +175,9 @@ export default function BookingPage() {
   return (
     <div className="container xl:max-w-screen-xl mx-auto pb-10 px-2 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
-      {!bookingInfo ? null : (
+      {!bookingInfo ? (
+        <InnerSpinner />
+      ) : (
         <div className="movieDetails flex mb-5">
           <div className="movieDetails__cover w-64 h-80 mr-6 flex-shrink-0">
             <img
@@ -208,18 +216,3 @@ export default function BookingPage() {
     </div>
   );
 }
-
-// {
-//   "maPhim": 8803,
-//   "tenPhim": "Fantastic Beasts 2",
-//   "biDanh": "fantastic-beasts-2",
-//   "trailer": "https://youtu.be/8bYBOVWLNIs",
-//   "hinhAnh": "https://movienew.cybersoft.edu.vn/hinhanh/fantastic-beasts-2_gp02.jpg",
-//   "moTa": "Một vài tháng khi Newt Scamander (Eddie Redmayne) giúp vén màn bí mật và bắt giữ phù thủy bóng tối Gellert Grindelwald (Johnny Depp). Tuy nhiên, Grinderwald đã làm một cuộc tẩu thoát ngoạn mục và thu nạp được lực lượng những người đi theo mình. Người duy nhất trong hoàn cảnh bấy giờ có thể ngăn chặn Grindelwald chính là Albus Dumbledore (Jude Law). Cuộc hành trình chống lại thế lực bóng tối này còn có sự góp mặt của Tina (Katherine Waterson), Queenie (Alison Sudol) và Jacob (Dan Fogler). Đây sẽ là phép thử để mọi người chứng minh lòng trung thành khi đối mặt với thế lực bóng đêm. ",
-//   "maNhom": "GP02",
-//   "hot": false,
-//   "dangChieu": true,
-//   "sapChieu": false,
-//   "ngayKhoiChieu": "2022-09-24T22:49:11.927",
-//   "danhGia": 8
-// }

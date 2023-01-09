@@ -1,9 +1,8 @@
-import { QRCodeSVG } from "qrcode.react";
-import React from "react";
-import { createPortal } from "react-dom";
-import { generalStyle } from "../../../styles/movieStyle";
-import { heroIcon } from "../../constants/heroIcon";
-import { bookingUtils } from "./bookingUtils";
+import { QRCodeSVG } from 'qrcode.react';
+import { createPortal } from 'react-dom';
+import { generalStyle } from '../../../styles/movieStyle';
+import { heroIcon } from '../../constants/heroIcon';
+import { bookingUtils } from './bookingUtils';
 
 export default function BookingSuccess({
   isBookingSuccessOpen,
@@ -65,6 +64,6 @@ export default function BookingSuccess({
         </div>
       </div>
     </>,
-    document.getElementById("portal")
+    document.getElementById('portal'),
   );
 }
