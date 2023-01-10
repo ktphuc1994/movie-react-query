@@ -7,7 +7,8 @@ import localConst from '../constants/localConst';
 import { InterfaceMovie } from '../interface/movies/movie.interface';
 import { InterfaceHeThongRap } from '../interface/theatres/theatre.interface';
 import {
-  InterfaceSchedule,
+  InterfaceCreateTicket,
+  InterfaceScheduleAndSeat,
   InterfaceShowtimeInfo,
 } from '../interface/booking/booking.interface';
 
@@ -24,7 +25,7 @@ const MOVIE_SERV = {
     ).get(`/LayDanhSachPhim`);
     return data.content;
   },
-  getShowtimeInfo: async (maPhim: string): Promise<InterfaceShowtimeInfo> => {
+  getMovieShowtime: async (maPhim: string): Promise<InterfaceShowtimeInfo> => {
     const { data } = await AXIOS_INSTANCE_GENERATOR(
       localConst.BASE_THEATER_URL(),
     ).get(`/LayThongTinLichChieuPhim/${maPhim}`);
@@ -32,12 +33,13 @@ const MOVIE_SERV = {
   },
   getScheduleDetail: async (
     maLichChieu: string,
-  ): Promise<InterfaceSchedule> => {
+  ): Promise<InterfaceScheduleAndSeat> => {
     const { data } = await AXIOS_INSTANCE_GENERATOR(
       localConst.BASE_BOOKING_URL(),
     ).get(`/LayDanhSachGheTheoLichChieu/${maLichChieu}`);
     return data.content;
   },
+  postBookTicket: async (ticketsInfo: InterfaceCreateTicket) => {},
 };
 
 export default MOVIE_SERV;

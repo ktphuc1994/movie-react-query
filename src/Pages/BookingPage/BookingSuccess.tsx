@@ -1,17 +1,19 @@
+import moment from 'moment';
 import { QRCodeSVG } from 'qrcode.react';
 import { createPortal } from 'react-dom';
-import { generalStyle } from '../../../styles/movieStyle';
-import { heroIcon } from '../../constants/heroIcon';
+import { generalStyle } from '../../core/styles/generalStyle';
+// import { heroIcon } from '../../constants/heroIcon';
+import { InterfaceBookingSuccessComponent } from '../../core/interface/booking/bookingComponent.interface';
 import { bookingUtils } from './bookingUtils';
 
 export default function BookingSuccess({
   isBookingSuccessOpen,
   handleCloseBookingSuccess,
   selectedSeatList,
-  selectedMovieInfo,
-}) {
+  scheduleInfo,
+}: InterfaceBookingSuccessComponent) {
   if (!isBookingSuccessOpen) return null;
-  if (!selectedMovieInfo) return null;
+  if (!scheduleInfo) return null;
   return createPortal(
     <>
       <div style={generalStyle.modalOverlay}></div>
@@ -20,7 +22,7 @@ export default function BookingSuccess({
         className="bookingSuccess bg-white p-5 w-2/3 sm:w-3/5 md:w-1/2 lg:w-auto"
       >
         <div className="absolute top-3 right-3">
-          <button onClick={handleCloseBookingSuccess}>{heroIcon.xIcon}</button>
+          <button onClick={handleCloseBookingSuccess}>X</button>
         </div>
         <div className="bookingSuccess__wrapper max-h-[90vh] mt-5 overflow-y-auto">
           <div className="ticketDetails border-b border-dashed border-black">
@@ -29,17 +31,17 @@ export default function BookingSuccess({
             </h4>
             <div className="pb-5 space-y-4 text-[16px]">
               <p className="mb-0 uppercase font-semibold text-xl">
-                {selectedMovieInfo.tenPhim}
+                {scheduleInfo.tenPhim}
               </p>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Xuất chiếu:</p>
-                <p>{selectedMovieInfo.ngayChieu}</p>
-                <p>{selectedMovieInfo.gioChieu}</p>
+                <p>{moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY')}</p>
+                <p>{moment(scheduleInfo.ngayGioChieu).format('hh:mm')}</p>
               </div>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Tên Rạp:</p>
-                <p>{selectedMovieInfo.tenCumRap}</p>
-                <p>{selectedMovieInfo.tenRap}</p>
+                <p>{scheduleInfo.tenCumRap}</p>
+                <p>{scheduleInfo.tenRap}</p>
               </div>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Ghế:</p>
@@ -53,7 +55,7 @@ export default function BookingSuccess({
           <div className="ticketQRCode py-5 border-b border-dashed border-black flex justify-center">
             <QRCodeSVG
               value={
-                selectedMovieInfo.maLichChieu.toString +
+                scheduleInfo.maLichChieu.toString +
                 JSON.stringify(selectedSeatList)
               }
             />
@@ -64,6 +66,6 @@ export default function BookingSuccess({
         </div>
       </div>
     </>,
-    document.getElementById('portal'),
+    document.getElementById('portal')!,
   );
 }

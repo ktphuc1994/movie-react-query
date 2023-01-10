@@ -32,10 +32,6 @@ function App() {
           {/* Private routes */}
           <Route element={<PrivateRoutes />}>
             <Route path="select-seat/:maLichChieu" element={<SelectSeat />} />
-            <Route
-              path="booking-confirm/:maLichChieu"
-              element={<BookingConfirmation />}
-            />
           </Route>
         </Route>
       </Routes>

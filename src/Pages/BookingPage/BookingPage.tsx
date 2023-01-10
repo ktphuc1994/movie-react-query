@@ -41,10 +41,10 @@ export default function BookingPage() {
     isLoading,
     isFetching,
     isError,
-    data: bookingInfo,
+    data: showtimeInfo,
   } = useQuery(
-    ['bookingInfo', maPhim],
-    () => MOVIE_SERV.getShowtimeInfo(maPhim!),
+    ['showtimeInfo', maPhim],
+    () => MOVIE_SERV.getMovieShowtime(maPhim!),
     {
       staleTime: 3600000,
       cacheTime: 3600000,
@@ -59,7 +59,7 @@ export default function BookingPage() {
   };
 
   const renderTheatreChains = () => {
-    if (bookingInfo?.heThongRap.length === 0) {
+    if (showtimeInfo?.heThongRap.length === 0) {
       return (
         <div>
           <p className="mb-1 text-xl">Phim hiện tại đã hết xuất chiếu.</p>
@@ -78,7 +78,7 @@ export default function BookingPage() {
         className="showtimeChains"
         defaultActiveKey="1"
         onChange={onChange}
-        items={bookingInfo?.heThongRap.map((heThongRap, index) => {
+        items={showtimeInfo?.heThongRap.map((heThongRap, index) => {
           return {
             label: (
               <img
@@ -175,23 +175,23 @@ export default function BookingPage() {
   return (
     <div className="container xl:max-w-screen-xl mx-auto pb-10 px-2 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
-      {!bookingInfo ? (
+      {!showtimeInfo ? (
         <InnerSpinner />
       ) : (
         <div className="movieDetails flex mb-5">
           <div className="movieDetails__cover w-64 h-80 mr-6 flex-shrink-0">
             <img
-              src={bookingInfo.hinhAnh}
-              alt={bookingInfo.tenPhim}
+              src={showtimeInfo.hinhAnh}
+              alt={showtimeInfo.tenPhim}
               className="object-cover h-full w-full"
             />
           </div>
           <div className="movieDetails__detail">
             <div className="flex items-center">
               <p className="mb-0 mr-2 font-bold text-2xl uppercase">
-                {bookingInfo.tenPhim}
+                {showtimeInfo.tenPhim}
               </p>
-              {bookingInfo.hot ? (
+              {showtimeInfo.hot ? (
                 <Tag color="#f50" className="font-bold">
                   HOT
                 </Tag>
@@ -202,12 +202,12 @@ export default function BookingPage() {
             <p className="pb-7 border-b border-b-white/70">
               Rating:{' '}
               <span className="font-semibold text-lg text-red-500">
-                {bookingInfo.danhGia}
+                {showtimeInfo.danhGia}
               </span>
               /10
             </p>
             <p className="mb-2 text-lg leading-loose text-justify">
-              {bookingInfo.moTa}
+              {showtimeInfo.moTa}
             </p>
           </div>
         </div>

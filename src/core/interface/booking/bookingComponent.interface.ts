@@ -1,5 +1,5 @@
 import { InterfaceBaseProps } from '../common/baseProps.interface';
-import { InterfaceScheduleInfo, InterfaceSeatInfo } from './booking.interface';
+import { InterfaceSchedule, InterfaceSeatInfo } from './booking.interface';
 
 export interface InterfaceSeatDetailsComponent extends InterfaceBaseProps {
   seatInfo: InterfaceSeatInfo;
@@ -9,7 +9,23 @@ export interface InterfaceSeatDetailsComponent extends InterfaceBaseProps {
 
 export interface InterfaceSelectedDetailTicketsComponent
   extends InterfaceBaseProps {
-  scheduleInfo: InterfaceScheduleInfo;
+  scheduleInfo: InterfaceSchedule;
   selectedSeatList: InterfaceSeatInfo[];
   setIsNotifyModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setStep: React.Dispatch<React.SetStateAction<1 | 2>>;
+}
+
+export interface InterfaceBookingConfirmationComponent
+  extends Omit<
+    InterfaceSelectedDetailTicketsComponent,
+    'setIsNotifyModalOpen'
+  > {}
+
+export interface InterfaceBookingSuccessComponent
+  extends Omit<
+    InterfaceSelectedDetailTicketsComponent,
+    'setIsNotifyModalOpen' | 'setStep'
+  > {
+  isBookingSuccessOpen: boolean;
+  handleCloseBookingSuccess: () => void;
 }

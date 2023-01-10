@@ -1,35 +1,26 @@
-import { message } from 'antd';
+import { Button, message } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { movieServ } from '../../../services/movieServ';
-import { numberWithCommas } from '../../../utils/utils';
-import { setIsLoading } from '../../redux/slices/generalSlice';
-import {
-  setSelectedMovieInfo,
-  setSelectedSeatList,
-} from '../../redux/slices/movieSlice';
+import { InterfaceBookingConfirmationComponent } from '../../core/interface/booking/bookingComponent.interface';
+import MOVIE_SERV from '../../core/services/movieServ';
+import { numberWithCommas } from '../../core/utils/utils';
+// import { setIsLoading } from '../../redux/slices/generalSlice';
+// import {
+//   setSelectedMovieInfo,
+//   setSelectedSeatList,
+// } from '../../redux/slices/movieSlice';
 import BookingSuccess from './BookingSuccess';
 import { bookingUtils } from './bookingUtils';
 
-export default function BookingConfirmation() {
-  let params = useParams();
-  let navigate = useNavigate();
-  let dispatch = useDispatch();
-
-  let [isBookingSuccessOpen, setIsBookingSuccessOpen] = useState(false);
-  let selectedSeatList = useSelector(
-    (state) => state.movieSlice.selectedSeatList,
-  );
-  let selectedMovieInfo = useSelector(
-    (state) => state.movieSlice.selectedMovieInfo,
-  );
-
-  useEffect(() => {
-    if (selectedMovieInfo === null) {
-      navigate(`/selectseat/${params.maLichChieu}`);
-    }
-  }, []);
+export default function BookingConfirmation({
+  scheduleInfo,
+  selectedSeatList,
+  setStep,
+}: InterfaceBookingConfirmationComponent) {
+  const navigate = useNavigate();
+  const [isBookingSuccessOpen, setIsBookingSuccessOpen] = useState(false);
 
   let getTotalPrice = () =>
     selectedSeatList.reduce((total, item) => total + item.giaVe, 0);
@@ -37,28 +28,22 @@ export default function BookingConfirmation() {
   let handleCloseBookingSuccess = () => {
     message.success('Chuyển hướng về Trang chủ', 2);
     setTimeout(() => {
-      dispatch(setSelectedSeatList([]));
-      dispatch(setSelectedMovieInfo(null));
       navigate('/');
-    }, 2000);
+    }, 1500);
   };
 
   let handleXacNhanDatVe = () => {
-    dispatch(setIsLoading(true));
     let ticketsInfo = {
-      maLichChieu: selectedMovieInfo.maLichChieu,
-      danhSachVe: selectedSeatList,
+      maLichChieu: scheduleInfo.maLichChieu,
+      danhSachGhe: selectedSeatList.map((seatInfo) => seatInfo.maGhe),
     };
-    movieServ
-      .postBookingTicket(ticketsInfo)
+    MOVIE_SERV.postBookTicket(ticketsInfo)
       .then((res) => {
         // console.log(res);
         setIsBookingSuccessOpen(true);
-        dispatch(setIsLoading(false));
       })
       .catch((err) => {
         console.log(err);
-        dispatch(setIsLoading(false));
       });
   };
 
@@ -115,38 +100,47 @@ export default function BookingConfirmation() {
   return (
     <div className="container xl:max-w-screen-xl mx-auto px-2 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
-      {!selectedMovieInfo ? null : (
-        <div className="movieInfo flex mb-5">
-          <div className="movieInfo__cover w-1/4 lg:w-1/6 mr-6 flex-shrink-0">
-            <img
-              src={selectedMovieInfo.hinhAnh}
-              alt={selectedMovieInfo.tenPhim}
-              className="object-contain w-full"
-            />
+      {!scheduleInfo ? null : (
+        <>
+          <Button
+            onClick={() => {
+              setStep(1);
+            }}
+          >
+            Trở về trước
+          </Button>
+          <div className="movieInfo flex mb-5">
+            <div className="movieInfo__cover w-1/4 lg:w-1/6 mr-6 flex-shrink-0">
+              <img
+                src={scheduleInfo.hinhAnh}
+                alt={scheduleInfo.tenPhim}
+                className="object-contain w-full"
+              />
+            </div>
+            <div className="movieInfo__detail">
+              <p className="mb-2 font-bold text-xl lg:text-2xl uppercase">
+                {scheduleInfo.tenPhim}
+              </p>
+              <p className="mb-0 font-semibold text-lg">
+                {scheduleInfo.tenCumRap}
+              </p>
+              <p className="mb-2 text-white/80">{scheduleInfo.diaChi}</p>
+              <p className="mb-0 text-lg">{scheduleInfo.tenRap}</p>
+              <p className="mb-0 text-white/70 text-[16px]">
+                Ghế:{' '}
+                <span className="font-semibold text-lg text-white">
+                  {bookingUtils.renderSelectedSeat(selectedSeatList)}
+                </span>
+              </p>
+              <p className="mb-2 text-white/70 text-[16px]">
+                Xuất chiếu:{' '}
+                <span className="font-semibold text-lg text-white">
+                  {moment(scheduleInfo.ngayGioChieu).format('hh:mm DD/MM/YYYY')}
+                </span>
+              </p>
+            </div>
           </div>
-          <div className="movieInfo__detail">
-            <p className="mb-2 font-bold text-xl lg:text-2xl uppercase">
-              {selectedMovieInfo.tenPhim}
-            </p>
-            <p className="mb-0 font-semibold text-lg">
-              {selectedMovieInfo.tenCumRap}
-            </p>
-            <p className="mb-2 text-white/80">{selectedMovieInfo.diaChi}</p>
-            <p className="mb-0 text-lg">{selectedMovieInfo.tenRap}</p>
-            <p className="mb-0 text-white/70 text-[16px]">
-              Ghế:{' '}
-              <span className="font-semibold text-lg text-white">
-                {bookingUtils.renderSelectedSeat(selectedSeatList)}
-              </span>
-            </p>
-            <p className="mb-2 text-white/70 text-[16px]">
-              Xuất chiếu:{' '}
-              <span className="font-semibold text-lg text-white">
-                {selectedMovieInfo.gioChieu} {selectedMovieInfo.ngayChieu}
-              </span>
-            </p>
-          </div>
-        </div>
+        </>
       )}
       <div>
         <h3 className="pb-3 mb-6 border-b-2 text-2xl lg:text-3xl text-white">
@@ -181,7 +175,7 @@ export default function BookingConfirmation() {
         isBookingSuccessOpen={isBookingSuccessOpen}
         handleCloseBookingSuccess={handleCloseBookingSuccess}
         selectedSeatList={selectedSeatList}
-        selectedMovieInfo={selectedMovieInfo}
+        scheduleInfo={scheduleInfo}
       />
     </div>
   );

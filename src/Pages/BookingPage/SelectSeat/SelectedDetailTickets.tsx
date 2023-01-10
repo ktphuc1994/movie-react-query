@@ -14,9 +14,8 @@ export default function SelectedDetailTickets({
   scheduleInfo,
   selectedSeatList,
   setIsNotifyModalOpen,
+  setStep,
 }: InterfaceSelectedDetailTicketsComponent) {
-  const navigate = useNavigate();
-
   const getTotalPrice = () =>
     selectedSeatList.reduce((total, item) => total + item.giaVe, 0);
 
@@ -25,8 +24,7 @@ export default function SelectedDetailTickets({
       setIsNotifyModalOpen(true);
       return;
     }
-    // dispatch(setSelectedMovieInfo(scheduleInfo));
-    navigate(`/booking-confirm/${scheduleInfo.maLichChieu}`);
+    setStep(2);
   };
 
   return (

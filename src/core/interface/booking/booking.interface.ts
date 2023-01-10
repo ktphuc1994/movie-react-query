@@ -22,7 +22,7 @@ export interface InterfaceSeatInfo {
   taiKhoan: number;
 }
 
-export interface InterfaceScheduleInfo {
+export interface InterfaceSchedule {
   maLichChieu: number;
   tenCumRap: string;
   diaChi: string;
@@ -32,6 +32,11 @@ export interface InterfaceScheduleInfo {
   ngayGioChieu: string;
 }
 
-export interface InterfaceSchedule extends InterfaceScheduleInfo {
+export interface InterfaceScheduleAndSeat extends InterfaceSchedule {
   danhSachGhe: InterfaceSeatInfo[];
+}
+
+export interface InterfaceCreateTicket {
+  maLichChieu: number;
+  danhSachGhe: number[];
 }

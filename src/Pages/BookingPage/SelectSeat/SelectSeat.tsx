@@ -20,6 +20,7 @@ import MOVIE_SERV from '../../../core/services/movieServ';
 
 // import local constants
 import { webColor } from '../../../core/constants/colorConst';
+import BookingConfirmation from '../BookingConfirmation';
 
 export default function SelectSeat() {
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
@@ -29,6 +30,7 @@ export default function SelectSeat() {
   const [selectedSeatList, setSelectedSeatList] = useState<InterfaceSeatInfo[]>(
     [],
   );
+  const [step, setStep] = useState<1 | 2>(1);
 
   // Lấy thông tin lịch chiếu theo mã lịch chiếu
   // useEffect(() => {
@@ -53,7 +55,7 @@ export default function SelectSeat() {
   //       dispatch(setIsLoading(false));
   //     });
   // }, []);
-  const { data } = useQuery(['schedule', maLichChieu], () =>
+  const { data } = useQuery(['scheduleAndSeat', maLichChieu], () =>
     MOVIE_SERV.getScheduleDetail(maLichChieu!),
   );
   if (!data) return null;
@@ -85,7 +87,6 @@ export default function SelectSeat() {
 
   // Render danh sách ghế ra màn hình
   const renderSeats = () => {
-    // console.log("run 2");
     return (
       <>
         <div className="max-w-xl mx-auto p-5 sm:p-0 grid grid-cols-16 gap-2">
@@ -123,44 +124,53 @@ export default function SelectSeat() {
   // console.log(selectedSeatList);
   return (
     <>
-      <div className="container xl:max-w-screen-xl mx-auto px-2 sm:px-0">
-        <h2 className="mb-6 pb-3 border-b-2 text-3xl text-white">Đặt vé</h2>
-        <div className="container max-w-screen-lg mx-auto border border-white/50">
-          <div className="theatreInfo p-5">
-            <p className="mb-2 font-bold text-2xl uppercase">
-              {scheduleInfo.tenPhim}
-            </p>
-            <p className="mb-1 font-semibold text-xl">
-              {scheduleInfo.tenCumRap} | {scheduleInfo.tenRap}
-            </p>
-            <p className="text-white/80">{scheduleInfo.diaChi}</p>
-            <p className="mb-0 text-lg text-white/80">
-              Xuất chiếu:{' '}
-              <span className="text-white font-semibold">
-                {moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY hh:mm')}
-              </span>
-            </p>
-          </div>
-          <div className="mb-8">
-            <p className="py-2 px-5 bg-gray-600 text-center text-lg font-semibold text-white">
-              Chọn ghế
-            </p>
-            <div className="px-5">
-              <img
-                className="w-full mt-8 mb-12"
-                src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-screen.png"
-                alt=""
-              />
+      {step === 1 ? (
+        <div className="container xl:max-w-screen-xl mx-auto px-2 sm:px-0">
+          <h2 className="mb-6 pb-3 border-b-2 text-3xl text-white">Đặt vé</h2>
+          <div className="container max-w-screen-lg mx-auto border border-white/50">
+            <div className="theatreInfo p-5">
+              <p className="mb-2 font-bold text-2xl uppercase">
+                {scheduleInfo.tenPhim}
+              </p>
+              <p className="mb-1 font-semibold text-xl">
+                {scheduleInfo.tenCumRap} | {scheduleInfo.tenRap}
+              </p>
+              <p className="text-white/80">{scheduleInfo.diaChi}</p>
+              <p className="mb-0 text-lg text-white/80">
+                Xuất chiếu:{' '}
+                <span className="text-white font-semibold">
+                  {moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY hh:mm')}
+                </span>
+              </p>
             </div>
-            {renderSeats()}
+            <div className="mb-8">
+              <p className="py-2 px-5 bg-gray-600 text-center text-lg font-semibold text-white">
+                Chọn ghế
+              </p>
+              <div className="px-5">
+                <img
+                  className="w-full mt-8 mb-12"
+                  src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-screen.png"
+                  alt=""
+                />
+              </div>
+              {renderSeats()}
+            </div>
+            <SelectedDetailTickets
+              setIsNotifyModalOpen={setIsNotifyModalOpen}
+              scheduleInfo={scheduleInfo}
+              selectedSeatList={selectedSeatList}
+              setStep={setStep}
+            />
           </div>
-          <SelectedDetailTickets
-            setIsNotifyModalOpen={setIsNotifyModalOpen}
-            scheduleInfo={scheduleInfo}
-            selectedSeatList={selectedSeatList}
-          />
         </div>
-      </div>
+      ) : (
+        <BookingConfirmation
+          scheduleInfo={scheduleInfo}
+          selectedSeatList={selectedSeatList}
+          setStep={setStep}
+        />
+      )}
       <NotifyModal
         isNotifyModalOpen={isNotifyModalOpen}
         handleOKClick={handleOKClick}
