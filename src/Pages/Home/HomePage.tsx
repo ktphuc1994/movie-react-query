@@ -11,7 +11,6 @@ const HomePage = () => {
   const {
     isLoading,
     isFetching,
-    isError,
     data: moviesList,
   } = useQuery(['moviesList'], MOVIE_SERV.getMovieList, {
     staleTime: 3600000,

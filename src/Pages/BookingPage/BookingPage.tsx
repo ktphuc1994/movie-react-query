@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 // import react query
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // import ANTD component
 import { Tabs, Tag } from 'antd';
@@ -22,33 +22,12 @@ import moment from 'moment';
 export default function BookingPage() {
   const { maPhim } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // useEffect(() => {
-  //   dispatch(setIsLoading(true));
-  //   MOVIE_SERV.getMovieShowtimes(params.maPhim)
-  //     .then((res) => {
-  //       // console.log(res);
-  //       setBookingInfo(res.data.content);
-  //       dispatch(setIsLoading(false));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       dispatch(setIsLoading(false));
-  //     });
-  // }, []);
-
-  const {
-    isLoading,
-    isFetching,
-    isError,
-    data: showtimeInfo,
-  } = useQuery(
-    ['showtimeInfo', maPhim],
-    () => MOVIE_SERV.getMovieShowtime(maPhim!),
-    {
-      staleTime: 3600000,
-      cacheTime: 3600000,
-    },
+  const { data: scheduleInfo } = useQuery(
+    ['scheduleInfo', maPhim],
+    () => MOVIE_SERV.getMovieSchedule(maPhim!),
+    { staleTime: 3600000, cacheTime: 3600000 },
   );
 
   const onChange = (key: any) => {
@@ -59,7 +38,7 @@ export default function BookingPage() {
   };
 
   const renderTheatreChains = () => {
-    if (showtimeInfo?.heThongRap.length === 0) {
+    if (scheduleInfo?.heThongRap.length === 0) {
       return (
         <div>
           <p className="mb-1 text-xl">Phim hiện tại đã hết xuất chiếu.</p>
@@ -78,7 +57,7 @@ export default function BookingPage() {
         className="showtimeChains"
         defaultActiveKey="1"
         onChange={onChange}
-        items={showtimeInfo?.heThongRap.map((heThongRap, index) => {
+        items={scheduleInfo?.heThongRap.map((heThongRap, index) => {
           return {
             label: (
               <img
@@ -160,14 +139,21 @@ export default function BookingPage() {
   const renderHoursList = (showHoursList: InterfaceLichChieuPhim[]) => (
     <div>
       {showHoursList.map((showHour, index) => (
-        <NavLink
-          to={`/select-seat/${showHour.maLichChieu}`}
+        // <NavLink
+        //   to={`/select-seat/${showHour.maLichChieu}`}
+        //   key={showHour.maLichChieu.toString() + index}
+        // >
+        <button
+          className="px-5 py-2.5 m-2 border rounded-lg border-white/50 hover:border-white font-medium text-[16px] sm:text-lg text-center text-white/50 hover:text-white"
           key={showHour.maLichChieu.toString() + index}
+          onClick={() => {
+            queryClient.invalidateQueries(['showtimeAndSeat']);
+            navigate(`/select-seat/${showHour.maLichChieu}`);
+          }}
         >
-          <button className="px-5 py-2.5 m-2 border rounded-lg border-white/50 hover:border-white font-medium text-[16px] sm:text-lg text-center text-white/50 hover:text-white">
-            {moment(showHour.ngayGioChieu).format('hh:mm A')}
-          </button>
-        </NavLink>
+          {moment(showHour.ngayGioChieu).format('hh:mm A')}
+        </button>
+        // </NavLink>
       ))}
     </div>
   );
@@ -175,23 +161,23 @@ export default function BookingPage() {
   return (
     <div className="container xl:max-w-screen-xl mx-auto pb-10 px-2 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
-      {!showtimeInfo ? (
+      {!scheduleInfo ? (
         <InnerSpinner />
       ) : (
         <div className="movieDetails flex mb-5">
           <div className="movieDetails__cover w-64 h-80 mr-6 flex-shrink-0">
             <img
-              src={showtimeInfo.hinhAnh}
-              alt={showtimeInfo.tenPhim}
+              src={scheduleInfo.hinhAnh}
+              alt={scheduleInfo.tenPhim}
               className="object-cover h-full w-full"
             />
           </div>
           <div className="movieDetails__detail">
             <div className="flex items-center">
               <p className="mb-0 mr-2 font-bold text-2xl uppercase">
-                {showtimeInfo.tenPhim}
+                {scheduleInfo.tenPhim}
               </p>
-              {showtimeInfo.hot ? (
+              {scheduleInfo.hot ? (
                 <Tag color="#f50" className="font-bold">
                   HOT
                 </Tag>
@@ -202,12 +188,12 @@ export default function BookingPage() {
             <p className="pb-7 border-b border-b-white/70">
               Rating:{' '}
               <span className="font-semibold text-lg text-red-500">
-                {showtimeInfo.danhGia}
+                {scheduleInfo.danhGia}
               </span>
               /10
             </p>
             <p className="mb-2 text-lg leading-loose text-justify">
-              {showtimeInfo.moTa}
+              {scheduleInfo.moTa}
             </p>
           </div>
         </div>

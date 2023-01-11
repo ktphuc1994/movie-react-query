@@ -1,5 +1,5 @@
 import { InterfaceBaseProps } from '../common/baseProps.interface';
-import { InterfaceSchedule, InterfaceSeatInfo } from './booking.interface';
+import { InterfaceShowtime, InterfaceSeatInfo } from './booking.interface';
 
 export interface InterfaceSeatDetailsComponent extends InterfaceBaseProps {
   seatInfo: InterfaceSeatInfo;
@@ -9,7 +9,7 @@ export interface InterfaceSeatDetailsComponent extends InterfaceBaseProps {
 
 export interface InterfaceSelectedDetailTicketsComponent
   extends InterfaceBaseProps {
-  scheduleInfo: InterfaceSchedule;
+  showtimeInfo: InterfaceShowtime;
   selectedSeatList: InterfaceSeatInfo[];
   setIsNotifyModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setStep: React.Dispatch<React.SetStateAction<1 | 2>>;

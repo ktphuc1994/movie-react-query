@@ -1,19 +1,26 @@
+import { createPortal } from 'react-dom';
+
+// import other library
 import moment from 'moment';
 import { QRCodeSVG } from 'qrcode.react';
-import { createPortal } from 'react-dom';
-import { generalStyle } from '../../core/styles/generalStyle';
-// import { heroIcon } from '../../constants/heroIcon';
+
+// import local interface
 import { InterfaceBookingSuccessComponent } from '../../core/interface/booking/bookingComponent.interface';
+
+// import local styles
+import { generalStyle } from '../../core/styles/generalStyle';
+
+// import local utils
 import { bookingUtils } from './bookingUtils';
 
 export default function BookingSuccess({
   isBookingSuccessOpen,
   handleCloseBookingSuccess,
   selectedSeatList,
-  scheduleInfo,
+  showtimeInfo,
 }: InterfaceBookingSuccessComponent) {
   if (!isBookingSuccessOpen) return null;
-  if (!scheduleInfo) return null;
+  if (!showtimeInfo) return null;
   return createPortal(
     <>
       <div style={generalStyle.modalOverlay}></div>
@@ -31,17 +38,17 @@ export default function BookingSuccess({
             </h4>
             <div className="pb-5 space-y-4 text-[16px]">
               <p className="mb-0 uppercase font-semibold text-xl">
-                {scheduleInfo.tenPhim}
+                {showtimeInfo.tenPhim}
               </p>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Xuất chiếu:</p>
-                <p>{moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY')}</p>
-                <p>{moment(scheduleInfo.ngayGioChieu).format('hh:mm')}</p>
+                <p>{moment(showtimeInfo.ngayGioChieu).format('DD/MM/YYYY')}</p>
+                <p>{moment(showtimeInfo.ngayGioChieu).format('hh:mm')}</p>
               </div>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Tên Rạp:</p>
-                <p>{scheduleInfo.tenCumRap}</p>
-                <p>{scheduleInfo.tenRap}</p>
+                <p>{showtimeInfo.tenCumRap}</p>
+                <p>{showtimeInfo.tenRap}</p>
               </div>
               <div className="space-y-0">
                 <p className="mb-0 font-semibold">Ghế:</p>
@@ -55,7 +62,7 @@ export default function BookingSuccess({
           <div className="ticketQRCode py-5 border-b border-dashed border-black flex justify-center">
             <QRCodeSVG
               value={
-                scheduleInfo.maLichChieu.toString +
+                showtimeInfo.maLichChieu.toString +
                 JSON.stringify(selectedSeatList)
               }
             />

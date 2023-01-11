@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 // import other library
 import moment from 'moment';
 
@@ -11,7 +9,7 @@ import { numberWithCommas } from '../../../core/utils/utils';
 import { bookingUtils } from '../bookingUtils';
 
 export default function SelectedDetailTickets({
-  scheduleInfo,
+  showtimeInfo,
   selectedSeatList,
   setIsNotifyModalOpen,
   setStep,
@@ -31,12 +29,12 @@ export default function SelectedDetailTickets({
     <div>
       <div className="flex flex-wrap sm:flex-nowrap justify-between border-t border-white/50 p-5">
         <img
-          src={scheduleInfo.hinhAnh}
-          alt={scheduleInfo.tenPhim}
+          src={showtimeInfo.hinhAnh}
+          alt={showtimeInfo.tenPhim}
           className="hidden sm:inline w-1/2 sm:w-28 md:w-32 object-cover"
         />
         <p className="w-full sm:w-1/6 mb-4 sm:mb-0 px-0 sm:px-3 uppercase font-semibold text-xl sm:text-lg lg:text-xl text-center sm:text-left">
-          {scheduleInfo.tenPhim}
+          {showtimeInfo.tenPhim}
         </p>
         <div className="w-2/3 sm:w-auto text-[16px] lg:text-lg">
           <table>
@@ -44,13 +42,13 @@ export default function SelectedDetailTickets({
               <tr>
                 <td className="pb-2 align-top">Rạp</td>
                 <td className="pl-3 sm:pl-1 md:pl-4 pb-2 font-semibold">
-                  {scheduleInfo.tenCumRap}
+                  {showtimeInfo.tenCumRap}
                 </td>
               </tr>
               <tr>
                 <td className="pb-2">Suất chiếu</td>
                 <td className="pl-3 sm:pl-1 md:pl-4 pb-2 font-semibold">
-                  {moment(scheduleInfo.ngayGioChieu).format(
+                  {moment(showtimeInfo.ngayGioChieu).format(
                     'hh:mm, DD/MM/YYYY',
                   )}
                 </td>
@@ -58,7 +56,7 @@ export default function SelectedDetailTickets({
               <tr>
                 <td className="pb-2">Phòng chiếu</td>
                 <td className="pl-3 sm:pl-1 md:pl-4 pb-2 font-semibold align-top">
-                  {scheduleInfo.tenRap}
+                  {showtimeInfo.tenRap}
                 </td>
               </tr>
               <tr>

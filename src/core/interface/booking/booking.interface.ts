@@ -8,7 +8,7 @@ export interface InterfaceLichChieuPhim {
   ngayGioChieu: string;
 }
 
-export interface InterfaceShowtimeInfo extends InterfaceMovie {
+export interface InterfaceScheduleInfo extends InterfaceMovie {
   heThongRap: InterfaceHeThongRap[];
 }
 
@@ -22,7 +22,7 @@ export interface InterfaceSeatInfo {
   taiKhoan: number;
 }
 
-export interface InterfaceSchedule {
+export interface InterfaceShowtime {
   maLichChieu: number;
   tenCumRap: string;
   diaChi: string;
@@ -32,7 +32,7 @@ export interface InterfaceSchedule {
   ngayGioChieu: string;
 }
 
-export interface InterfaceScheduleAndSeat extends InterfaceSchedule {
+export interface InterfaceShowtimeAndSeat extends InterfaceShowtime {
   danhSachGhe: InterfaceSeatInfo[];
 }
 

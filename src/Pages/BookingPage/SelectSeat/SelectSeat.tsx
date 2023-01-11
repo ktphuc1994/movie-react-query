@@ -23,44 +23,28 @@ import { webColor } from '../../../core/constants/colorConst';
 import BookingConfirmation from '../BookingConfirmation';
 
 export default function SelectSeat() {
-  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
-  // let [seatsList, setSeatsList] = useState(null);
-  // let [scheduleInfo, setScheduleInfo] = useState(null);
   const { maLichChieu } = useParams();
+  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState<boolean>(false);
   const [selectedSeatList, setSelectedSeatList] = useState<InterfaceSeatInfo[]>(
     [],
   );
   const [step, setStep] = useState<1 | 2>(1);
 
   // Lấy thông tin lịch chiếu theo mã lịch chiếu
-  // useEffect(() => {
-  //   dispatch(setIsLoading(true));
-  //   movieServ
-  //     .getScheduleDetails(params.maLichChieu)
-  //     .then((res) => {
-  //       // console.log("res");
-  //       setSeatsList(
-  //         res.data.content.danhSachGhe.map((seat) => ({
-  //           ...seat,
-  //           selected: false,
-  //         })),
-  //       );
-  //       setScheduleInfo(res.data.content.thongTinPhim);
-  //       dispatch(setSelectedSeatList([]));
-  //       dispatch(setSelectedMovieInfo(null));
-  //       dispatch(setIsLoading(false));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       dispatch(setIsLoading(false));
-  //     });
-  // }, []);
-  const { data } = useQuery(['scheduleAndSeat', maLichChieu], () =>
-    MOVIE_SERV.getScheduleDetail(maLichChieu!),
+  const { data } = useQuery(
+    ['showtimeAndSeat', maLichChieu],
+    () => MOVIE_SERV.getShowtimeDetail(maLichChieu!),
+    { staleTime: 60 * 60 * 1000, cacheTime: 60 * 60 * 1000 },
   );
   if (!data) return null;
 
-  const { danhSachGhe, ...scheduleInfo } = data;
+  const { danhSachGhe, ...showtimeInfo } = data;
+  const collator = new Intl.Collator('en', {
+    numeric: true,
+    sensitivity: 'base',
+  });
+  danhSachGhe.sort((a, b) => collator.compare(a.tenGhe, b.tenGhe));
+
   // HANDLE Notify Modal
   const handleOKClick = () => {
     setIsNotifyModalOpen(false);
@@ -89,7 +73,7 @@ export default function SelectSeat() {
   const renderSeats = () => {
     return (
       <>
-        <div className="max-w-xl mx-auto p-5 sm:p-0 grid grid-cols-16 gap-2">
+        <div className="max-w-xl mx-auto p-5 sm:p-0 grid grid-cols-12 gap-2">
           {danhSachGhe.map((seatInfo, index) => (
             <SeatDetails
               key={seatInfo.maGhe.toString() + index}
@@ -120,8 +104,7 @@ export default function SelectSeat() {
       </>
     );
   };
-  // console.log("run");
-  // console.log(selectedSeatList);
+
   return (
     <>
       {step === 1 ? (
@@ -130,16 +113,16 @@ export default function SelectSeat() {
           <div className="container max-w-screen-lg mx-auto border border-white/50">
             <div className="theatreInfo p-5">
               <p className="mb-2 font-bold text-2xl uppercase">
-                {scheduleInfo.tenPhim}
+                {showtimeInfo.tenPhim}
               </p>
               <p className="mb-1 font-semibold text-xl">
-                {scheduleInfo.tenCumRap} | {scheduleInfo.tenRap}
+                {showtimeInfo.tenCumRap} | {showtimeInfo.tenRap}
               </p>
-              <p className="text-white/80">{scheduleInfo.diaChi}</p>
+              <p className="text-white/80">{showtimeInfo.diaChi}</p>
               <p className="mb-0 text-lg text-white/80">
                 Xuất chiếu:{' '}
                 <span className="text-white font-semibold">
-                  {moment(scheduleInfo.ngayGioChieu).format('DD/MM/YYYY hh:mm')}
+                  {moment(showtimeInfo.ngayGioChieu).format('DD/MM/YYYY hh:mm')}
                 </span>
               </p>
             </div>
@@ -158,7 +141,7 @@ export default function SelectSeat() {
             </div>
             <SelectedDetailTickets
               setIsNotifyModalOpen={setIsNotifyModalOpen}
-              scheduleInfo={scheduleInfo}
+              showtimeInfo={showtimeInfo}
               selectedSeatList={selectedSeatList}
               setStep={setStep}
             />
@@ -166,7 +149,7 @@ export default function SelectSeat() {
         </div>
       ) : (
         <BookingConfirmation
-          scheduleInfo={scheduleInfo}
+          showtimeInfo={showtimeInfo}
           selectedSeatList={selectedSeatList}
           setStep={setStep}
         />
@@ -181,26 +164,3 @@ export default function SelectSeat() {
     </>
   );
 }
-
-// {
-//   "thongTinPhim": {
-//     "maLichChieu": 25116,
-//     "tenCumRap": "CGV - Parkson Đồng Khởi",
-//     "tenRap": "Rạp 3",
-//     "diaChi": "Tầng 5 Parkson Đồng Khởi, 35bis-45 Lê Thánh Tôn, Bến Nghé, Q.1",
-//     "tenPhim": "The Longest Rided 2010",
-//     "hinhAnh": "https://movienew.cybersoft.edu.vn/hinhanh/thewalkingdead.jpg",
-//     "ngayChieu": "09/01/2019",
-//     "gioChieu": "08:01"
-//   },
-//   "danhSachGhe": [
-//     {
-//       "maGhe": 76521,
-//       "tenGhe": "01",
-//       "maRap": 633,
-//       "loaiGhe": "Thuong",
-//       "stt": "01",
-//       "giaVe": 75000,
-//       "daDat": false,
-//       "taiKhoanNguoiDat": null
-//     }]}

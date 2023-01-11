@@ -1,24 +1,31 @@
-import { Button, message } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// import other library
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { InterfaceBookingConfirmationComponent } from '../../core/interface/booking/bookingComponent.interface';
+
+// import local services
 import MOVIE_SERV from '../../core/services/movieServ';
-import { numberWithCommas } from '../../core/utils/utils';
-// import { setIsLoading } from '../../redux/slices/generalSlice';
-// import {
-//   setSelectedMovieInfo,
-//   setSelectedSeatList,
-// } from '../../redux/slices/movieSlice';
+
+// import local components
 import BookingSuccess from './BookingSuccess';
+
+// import ANTD Components
+import { Button, message } from 'antd';
+
+// import local interface
+import { InterfaceBookingConfirmationComponent } from '../../core/interface/booking/bookingComponent.interface';
+
+// import local utils
+import { numberWithCommas } from '../../core/utils/utils';
 import { bookingUtils } from './bookingUtils';
 
 export default function BookingConfirmation({
-  scheduleInfo,
+  showtimeInfo,
   selectedSeatList,
   setStep,
 }: InterfaceBookingConfirmationComponent) {
+  window.scrollTo(0, 0);
   const navigate = useNavigate();
   const [isBookingSuccessOpen, setIsBookingSuccessOpen] = useState(false);
 
@@ -34,12 +41,11 @@ export default function BookingConfirmation({
 
   let handleXacNhanDatVe = () => {
     let ticketsInfo = {
-      maLichChieu: scheduleInfo.maLichChieu,
+      maLichChieu: showtimeInfo.maLichChieu,
       danhSachGhe: selectedSeatList.map((seatInfo) => seatInfo.maGhe),
     };
     MOVIE_SERV.postBookTicket(ticketsInfo)
-      .then((res) => {
-        // console.log(res);
+      .then(() => {
         setIsBookingSuccessOpen(true);
       })
       .catch((err) => {
@@ -70,14 +76,11 @@ export default function BookingConfirmation({
             </tr>
           );
         })}
-        <tr className="border-white/50 border-b text-lg">
-          <td
-            className="py-4 px-6 font-medium text-white whitespace-nowrap"
-            colSpan={4}
-          >
+        <tr className="border-white/50 border-b text-lg font-semibold">
+          <td className="py-4 px-6 text-white whitespace-nowrap" colSpan={4}>
             TỔNG CỘNG:
           </td>
-          <td className="py-4 px-6 font-medium text-white whitespace-nowrap">
+          <td className="py-4 px-6 text-white whitespace-nowrap">
             {numberWithCommas(getTotalPrice())} đ
           </td>
         </tr>
@@ -100,7 +103,7 @@ export default function BookingConfirmation({
   return (
     <div className="container xl:max-w-screen-xl mx-auto px-2 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
-      {!scheduleInfo ? null : (
+      {!showtimeInfo ? null : (
         <>
           <Button
             onClick={() => {
@@ -112,20 +115,20 @@ export default function BookingConfirmation({
           <div className="movieInfo flex mb-5">
             <div className="movieInfo__cover w-1/4 lg:w-1/6 mr-6 flex-shrink-0">
               <img
-                src={scheduleInfo.hinhAnh}
-                alt={scheduleInfo.tenPhim}
+                src={showtimeInfo.hinhAnh}
+                alt={showtimeInfo.tenPhim}
                 className="object-contain w-full"
               />
             </div>
             <div className="movieInfo__detail">
               <p className="mb-2 font-bold text-xl lg:text-2xl uppercase">
-                {scheduleInfo.tenPhim}
+                {showtimeInfo.tenPhim}
               </p>
               <p className="mb-0 font-semibold text-lg">
-                {scheduleInfo.tenCumRap}
+                {showtimeInfo.tenCumRap}
               </p>
-              <p className="mb-2 text-white/80">{scheduleInfo.diaChi}</p>
-              <p className="mb-0 text-lg">{scheduleInfo.tenRap}</p>
+              <p className="mb-2 text-white/80">{showtimeInfo.diaChi}</p>
+              <p className="mb-0 text-lg">{showtimeInfo.tenRap}</p>
               <p className="mb-0 text-white/70 text-[16px]">
                 Ghế:{' '}
                 <span className="font-semibold text-lg text-white">
@@ -135,7 +138,7 @@ export default function BookingConfirmation({
               <p className="mb-2 text-white/70 text-[16px]">
                 Xuất chiếu:{' '}
                 <span className="font-semibold text-lg text-white">
-                  {moment(scheduleInfo.ngayGioChieu).format('hh:mm DD/MM/YYYY')}
+                  {moment(showtimeInfo.ngayGioChieu).format('hh:mm DD/MM/YYYY')}
                 </span>
               </p>
             </div>
@@ -175,7 +178,7 @@ export default function BookingConfirmation({
         isBookingSuccessOpen={isBookingSuccessOpen}
         handleCloseBookingSuccess={handleCloseBookingSuccess}
         selectedSeatList={selectedSeatList}
-        scheduleInfo={scheduleInfo}
+        showtimeInfo={showtimeInfo}
       />
     </div>
   );

@@ -3,16 +3,11 @@ import { AxiosError } from 'axios';
 import MOVIE_SERV from '../../services/movieServ';
 
 const Footer = () => {
-  const {
-    isLoading,
-    isFetching,
-    isError,
-    error,
-    data: theatreChainsList,
-  } = useQuery(['theatreChainsList'], MOVIE_SERV.getTheaterChainList, {
-    staleTime: 3600000,
-    cacheTime: 3600000,
-  });
+  const { error, data: theatreChainsList } = useQuery(
+    ['theatreChainsList'],
+    MOVIE_SERV.getTheaterChainList,
+    { staleTime: 3600000, cacheTime: 3600000 },
+  );
 
   let renderTheatreChainLogos = () => {
     if (error instanceof AxiosError) {

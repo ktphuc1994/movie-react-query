@@ -13,9 +13,7 @@ import HomePage from './Pages/Home/HomePage';
 import UnderDevelopedPage from './Pages/UnderDevelopedPage/UnderDevelopedPage';
 import BookingPage from './Pages/BookingPage/BookingPage';
 import SelectSeat from './Pages/BookingPage/SelectSeat/SelectSeat';
-import BookingConfirmation from './Pages/BookingPage/BookingConfirmation';
-
-// import local components
+import DetailMovie from './Pages/MoviesPage/DetailMovie';
 
 function App() {
   return (
@@ -27,6 +25,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="under-development" element={<UnderDevelopedPage />} />
+          <Route path="detail/:maPhim" element={<DetailMovie />} />
           <Route path="booking/:maPhim" element={<BookingPage />} />
 
           {/* Private routes */}
