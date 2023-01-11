@@ -1,21 +1,30 @@
 import moment from 'moment';
 import { NavLink, useParams } from 'react-router-dom';
 
+// import react query
+import { useQuery } from '@tanstack/react-query';
+
+// import local components
+import InnerSpinner from '../../core/Components/Spinners/InnerSpinner';
+import NotFound from '../../core/Components/Error/NotFound';
+
 // import ANTD Components
 import { Tag } from 'antd';
 
 // import local services
 import MOVIE_SERV from '../../core/services/movieServ';
-import { useQuery } from '@tanstack/react-query';
+
+// import local utils
 import { getStringPosition } from '../../core/utils/utils';
 
 export default function DetailMovie() {
   const { maPhim } = useParams();
 
-  const { data: movieDetail } = useQuery(['movieDetail', maPhim], () =>
+  const { isError, data: movieDetail } = useQuery(['movieDetail', maPhim], () =>
     MOVIE_SERV.getMovieDetail(maPhim!),
   );
-  if (!movieDetail) return null;
+  if (isError) return <NotFound />;
+  if (!movieDetail) return <InnerSpinner />;
 
   const getYouTubeLink = (shortenLink: string) => {
     const embedIndex = shortenLink.indexOf('youtube.com/embed');

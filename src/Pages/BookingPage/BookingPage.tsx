@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // import react query
 import { useQuery, useQueryClient } from '@tanstack/react-query';
