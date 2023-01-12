@@ -17,20 +17,7 @@ import MOVIE_SERV from '../../core/services/movieServ';
 
 export default function TheatresListPage() {
   const { maHeThongRap } = useParams();
-  // useEffect(() => {
-  //   dispatch(setIsLoading(true));
-  //   movieServ
-  //     .getMoviesByTheatres()
-  //     .then((res) => {
-  //       console.log(res);
-  //       setTheatreChains(res.data.content);
-  //       dispatch(setIsLoading(false));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       dispatch(setIsLoading(false));
-  //     });
-  // }, []);
+
   const { data: theatreChains } = useQuery(['theatre', maHeThongRap], () =>
     MOVIE_SERV.getTheatreChainAndSchedule(maHeThongRap),
   );

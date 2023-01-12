@@ -11,7 +11,7 @@ const Footer = () => {
 
   let renderTheatreChainLogos = () => {
     if (error instanceof AxiosError) {
-      console.log(error.response?.data.content);
+      console.log(error.response?.data);
       return;
     }
     return theatreChainsList?.map((chain, index) => {

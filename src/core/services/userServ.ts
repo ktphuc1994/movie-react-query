@@ -6,6 +6,7 @@ import LOCAL_SERV from './localServ';
 // import local interfaces
 import {
   InterfaceUser,
+  InterfaceUserLogin,
   InterfaceUserRegister,
 } from '../interface/user/user.interface';
 
@@ -13,10 +14,7 @@ import {
 import localConst from '../constants/localConst';
 
 const USER_SERV = {
-  postLogin: async (loginInfo: {
-    email: string;
-    matKhau: string;
-  }): Promise<string> => {
+  postLogin: async (loginInfo: InterfaceUserLogin): Promise<string> => {
     const { data } = await AXIOS_INSTANCE_GENERATOR(localConst.BASE_URL).post(
       '/api/login',
       loginInfo,

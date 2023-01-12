@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+// import axios
+import { AxiosError } from 'axios';
+
 // import react query
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -8,19 +11,22 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import LOCAL_SERV from '../../core/services/localServ';
 import USER_SERV from '../../core/services/userServ';
 
-// import local constants
-import { webColor } from '../../core/constants/colorConst';
-
 // import local Components
 import NotifyModal from '../../core/Components/Utils/NotifyModal';
+
+// import ANTD Components
+import { Button, Form, Input, notification } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+
+// import local interfaces
+import { InterfaceUserLogin } from '../../core/interface/user/user.interface';
 
 // import lottie
 import Lottie from 'lottie-react';
 import lottie_flyingRocket from '../../core/assets/lottie/lottie_flyingRocket.json';
 
-// import ANTD Components
-import { Button, Form, Input, notification } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+// import local constants
+import { webColor } from '../../core/constants/colorConst';
 
 const LoginPage = () => {
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState<boolean>(false);
@@ -44,9 +50,19 @@ const LoginPage = () => {
 
   const { data: user } = useQuery(['user'], USER_SERV.getUserInfo, {
     staleTime: 3600000,
+    cacheTime: 3600000,
+    retry: (failureCount, err) => {
+      if (err instanceof AxiosError) {
+        return false;
+      }
+      if (failureCount === 3) {
+        return false;
+      }
+      return true;
+    },
   });
 
-  const onFinish = (values: { email: string; matKhau: string }) => {
+  const onFinish = (values: InterfaceUserLogin) => {
     USER_SERV.postLogin(values)
       .then((res) => {
         LOCAL_SERV.token.set(res);

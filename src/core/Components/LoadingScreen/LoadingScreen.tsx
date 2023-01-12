@@ -5,9 +5,10 @@ import { ClockLoader } from 'react-spinners';
 import { webColor } from '../../constants/colorConst';
 
 export const LoadingScreen = () => {
-  const isFetching = useIsFetching({
-    queryKey: ['user'],
-  });
+  const isFetching = false;
+  // const isFetching = useIsFetching({
+  //   queryKey: ['user'],
+  // });
 
   return isFetching ? (
     <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/90 z-10">

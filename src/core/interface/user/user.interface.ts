@@ -8,3 +8,8 @@ export interface InterfaceUser {
 
 export interface InterfaceUserRegister
   extends Omit<InterfaceUser, 'loaiNguoiDung'> {}
+
+export interface InterfaceUserLogin {
+  email: string;
+  matKhau: string;
+}
