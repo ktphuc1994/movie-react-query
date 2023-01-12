@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // import local services
 import LOCAL_SERV from '../../core/services/localServ';
-import userServ from '../../core/services/userServ';
+import USER_SERV from '../../core/services/userServ';
 
 // import local constants
 import { webColor } from '../../core/constants/colorConst';
@@ -42,13 +42,12 @@ const LoginPage = () => {
     });
   };
 
-  const { data: user } = useQuery(['user'], userServ.getUserInfo, {
+  const { data: user } = useQuery(['user'], USER_SERV.getUserInfo, {
     staleTime: 3600000,
   });
 
   const onFinish = (values: { email: string; matKhau: string }) => {
-    userServ
-      .postLogin(values)
+    USER_SERV.postLogin(values)
       .then((res) => {
         LOCAL_SERV.token.set(res);
         openNotification('success');

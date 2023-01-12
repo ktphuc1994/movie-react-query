@@ -12,6 +12,10 @@ export interface InterfaceScheduleInfo extends InterfaceMovie {
   heThongRap: InterfaceHeThongRap[];
 }
 
+export interface InterfaceMovieAndSchedule extends InterfaceMovie {
+  lichChieuPhim: InterfaceLichChieuPhim[];
+}
+
 export interface InterfaceSeatInfo {
   maGhe: number;
   tenGhe: string;

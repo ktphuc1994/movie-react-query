@@ -1,9 +1,10 @@
-interface InterfaceUser {
-  taiKhoan: string;
+export interface InterfaceUser {
+  taiKhoan: number;
   hoTen: string;
   email: string;
   soDt: string;
-  maLoaiNguoiDung: string;
+  loaiNguoiDung: string;
 }
 
-export type { InterfaceUser };
+export interface InterfaceUserRegister
+  extends Omit<InterfaceUser, 'loaiNguoiDung'> {}

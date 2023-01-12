@@ -37,6 +37,15 @@ const MOVIE_SERV = {
     ).get(`/LayThongTinLichChieuPhim/${maPhim}`);
     return data.content;
   },
+  getTheatreChainAndSchedule: async (
+    maHeThongRap: string | undefined,
+  ): Promise<InterfaceHeThongRap[]> => {
+    const paramMaHeThong = maHeThongRap ? maHeThongRap : '';
+    const { data } = await AXIOS_INSTANCE_GENERATOR(
+      localConst.BASE_THEATER_URL(),
+    ).get(`/LayThongTinLichChieuTheoHeThongRap?maHeThongRap=${paramMaHeThong}`);
+    return data.content;
+  },
   getShowtimeDetail: async (
     maLichChieu: string,
   ): Promise<InterfaceShowtimeAndSeat> => {

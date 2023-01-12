@@ -1,4 +1,7 @@
-import { InterfaceLichChieuPhim } from '../booking/booking.interface';
+import {
+  InterfaceLichChieuPhim,
+  InterfaceMovieAndSchedule,
+} from '../booking/booking.interface';
 
 interface InterfaceHeThongRap {
   maHeThongRap: string;
@@ -12,6 +15,7 @@ interface InterfaceCumRap {
   tenCumRap: string;
   diaChi: string;
   lichChieuPhim?: InterfaceLichChieuPhim[];
+  phim?: InterfaceMovieAndSchedule[];
 }
 
 export type { InterfaceHeThongRap, InterfaceCumRap };
