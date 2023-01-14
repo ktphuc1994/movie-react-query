@@ -2,6 +2,7 @@ import 'antd/dist/reset.css';
 import './App.css';
 
 import { Route, Routes } from 'react-router-dom';
+import { ConfigProvider, theme } from 'antd';
 
 // import local Components
 import { Layout } from './core/HOC/Layout/Layout';
@@ -18,7 +19,11 @@ import TheatresListPage from './Pages/TheatrePage/TheatresListPage';
 
 function App() {
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        algorithm: theme.darkAlgorithm,
+      }}
+    >
       <LoadingScreen />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -36,7 +41,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
-    </>
+    </ConfigProvider>
   );
 }
 

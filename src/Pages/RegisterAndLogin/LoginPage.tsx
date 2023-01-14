@@ -176,11 +176,11 @@ const LoginPage = () => {
                           fontSize: '18px',
                           fontWeight: 700,
                           height: 'initial',
+                          marginRight: '20px',
                         }}
                       >
                         Đăng nhập
                       </Button>
-                      Or{' '}
                       <NavLink
                         className="text-[16px] text-red-500 hover:text-red-400"
                         to="/register"

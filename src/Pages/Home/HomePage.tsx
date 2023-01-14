@@ -1,101 +1,57 @@
-import dayjs from 'dayjs';
+import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 // import local services
 import MOVIE_SERV from '../../core/services/movieServ';
 
 // import local components
+import MovieFilterBar from './MovieFilterBar';
 import MoviesList from './MoviesList';
 import InnerSpinner from '../../core/Components/Spinners/InnerSpinner';
 
+// import types and interfaces
+import type { InputRef } from 'antd';
+import type { Dayjs } from 'dayjs';
+
 // import local constants
-import { TIME_FORMAT_CONST } from '../../core/constants/time.const';
-
-// import ANTD Components
-import { Button, DatePicker, Form, Input } from 'antd';
-const { RangePicker } = DatePicker;
-const dateFormat = TIME_FORMAT_CONST.DAY_MONTH_YEAR_FORMAT;
-
-// ANTD Config
-const formConfig = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-  initialValues: {
-    tenPhim: '',
-    ngayKhoiChieuPicker: [
-      dayjs(Date.now()),
-      dayjs(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000),
-    ],
-  },
-};
-const rangeConfig = {
-  rules: [
-    { type: 'array' as const, required: true, message: 'Please select time!' },
-  ],
-};
+import defaultConst from '../../core/constants/defaultConst';
 
 const HomePage = () => {
+  const tenPhimRef = useRef<InputRef>(null);
+  const ngayKhoiChieuPickerRef = useRef<(Dayjs | null)[]>(
+    defaultConst.movieFilterTimeRange,
+  );
+
   const {
     isLoading,
     isFetching,
-    data: moviesList,
-  } = useQuery(['moviesList'], MOVIE_SERV.getMovieList, {
-    staleTime: 3600000,
-    cacheTime: 3600000,
-  });
-
-  const onFinish = (fieldsValue: any) => {
-    // Should format date value before submit.
-    console.log('Received values of form: ', fieldsValue);
-    const rangeValue = fieldsValue['ngayKhoiChieuPicker'];
-    const fromDate = rangeValue[0].format('YYYY-MM-DD');
-    const toDate = rangeValue[1].format('YYYY-MM-DD');
-    const value = { tenPhim: fieldsValue.tenPhim, fromDate, toDate };
-    console.log('Output values of form: ', value);
-  };
-  const renderMovieFilter = () => (
-    <Form name="movie_filter_control" {...formConfig} onFinish={onFinish}>
-      <Form.Item name="tenPhim" label="Tên phim">
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="ngayKhoiChieuPicker"
-        label="Ngày khỏi chiếu"
-        {...rangeConfig}
-      >
-        <RangePicker format={dateFormat} />
-      </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          xs: { span: 24, offset: 0 },
-          sm: { span: 16, offset: 8 },
-        }}
-      >
-        <Button danger type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    data: moviePaginationInfo,
+  } = useQuery(
+    ['moviesList'],
+    () => {
+      const fromDate = ngayKhoiChieuPickerRef.current[0]?.format('YYYY-MM-DD');
+      const toDate = ngayKhoiChieuPickerRef.current[1]?.format('YYYY-MM-DD');
+      const tenPhim = tenPhimRef.current?.input?.value;
+      return MOVIE_SERV.getMoviesPagination({ tenPhim, fromDate, toDate });
+    },
+    {
+      staleTime: 3600000,
+      cacheTime: 3600000,
+    },
   );
 
   return (
     <>
-      <div className="container xl:max-w-screen-xl mx-auto">
+      <div className="container xl:max-w-screen-xl mx-auto p-5 sm:p-0">
         <h3 className="mt-10 font-semibold text-2xl">DANH SÁCH PHIM</h3>
-
+        <MovieFilterBar
+          tenPhimRef={tenPhimRef}
+          ngayKhoiChieuPickerRef={ngayKhoiChieuPickerRef}
+        />
         {isLoading || isFetching ? (
           <InnerSpinner />
         ) : (
-          <>
-            {renderMovieFilter()}
-            <MoviesList moviesList={moviesList} />
-          </>
+          <MoviesList moviesList={moviePaginationInfo?.items} />
         )}
       </div>
     </>

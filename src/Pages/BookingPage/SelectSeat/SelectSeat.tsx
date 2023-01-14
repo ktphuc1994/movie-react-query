@@ -83,7 +83,7 @@ export default function SelectSeat() {
             />
           ))}
         </div>
-        <div className="max-w-lg mx-auto grid grid-cols-2">
+        <div className="max-w-lg mx-auto px-5 sm:px-0 grid grid-cols-2">
           <div className="flex items-center mt-5">
             <div className="h-5 w-5 mr-3" style={webColor.seat.selected}></div>
             <p className="m-0">Đang chọn</p>

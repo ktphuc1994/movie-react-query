@@ -1,10 +1,15 @@
+import dayjs from 'dayjs';
 import { AXIOS_INSTANCE_GENERATOR } from './configURL';
 
 // import local constants
 import localConst from '../constants/localConst';
 
 // import local interfaces
-import { InterfaceMovie } from '../interface/movies/movie.interface';
+import {
+  InterfaceMovie,
+  InterfaceGetMoviePagination,
+  InterfaceMoviePagination,
+} from '../interface/movies/movie.interface';
 import { InterfaceHeThongRap } from '../interface/theatres/theatre.interface';
 import {
   InterfaceCreateTicket,
@@ -23,6 +28,32 @@ const MOVIE_SERV = {
     const { data } = await AXIOS_INSTANCE_GENERATOR(
       localConst.BASE_MOVIE_URL(),
     ).get(`/LayDanhSachPhim`);
+    return data.content;
+  },
+  getMoviesPagination: async ({
+    tenPhim,
+    currentPage = '1',
+    itemsPerPage = '999',
+    fromDate,
+    toDate,
+  }: InterfaceGetMoviePagination): Promise<InterfaceMoviePagination> => {
+    const fromDateSub = dayjs(Date.now() - 1 * 30 * 24 * 60 * 60 * 1000).format(
+      'YYYY-MM-DD',
+    );
+    const toDateSub = dayjs(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).format(
+      'YYYY-MM-DD',
+    );
+    const { data } = await AXIOS_INSTANCE_GENERATOR(
+      localConst.BASE_MOVIE_URL(),
+    ).get(
+      `/LayDanhSachPhimPhanTrang?tenPhim=${
+        tenPhim ? tenPhim : ''
+      }&currentPage=${currentPage ? currentPage : '1'}&itemsPerPage=${
+        itemsPerPage ? itemsPerPage : '999'
+      }&fromDate=${fromDate ? fromDate : fromDateSub}&toDate=${
+        toDate ? toDate : toDateSub
+      }`,
+    );
     return data.content;
   },
   getMovieDetail: async (maPhim: string): Promise<InterfaceMovie> => {

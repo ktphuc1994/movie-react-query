@@ -1,4 +1,4 @@
-interface InterfaceMovie {
+export interface InterfaceMovie {
   maPhim: number;
   tenPhim: string;
   trailer: string;
@@ -10,10 +10,25 @@ interface InterfaceMovie {
   dangChieu: boolean;
   sapChieu: boolean;
 }
-interface InterfaceBanner {
+
+export interface InterfaceMoviePagination {
+  currentPage: number;
+  itemsOnThisPage: number;
+  totalItems: number;
+  totalPages: number;
+  items: InterfaceMovie[];
+}
+
+export interface InterfaceBanner {
   maBanner: number;
   maPhim: number;
   hinhAnh: string;
 }
 
-export type { InterfaceMovie, InterfaceBanner };
+export interface InterfaceGetMoviePagination {
+  tenPhim: string | undefined;
+  currentPage?: string | undefined;
+  itemsPerPage?: string | undefined;
+  fromDate: string | undefined;
+  toDate: string | undefined;
+}
