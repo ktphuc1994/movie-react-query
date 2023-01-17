@@ -42,7 +42,7 @@ const LoginPage = () => {
       message: (
         <span className="font-semibold text-lg">Đăng nhập thành công</span>
       ),
-      description: 'Chuyển hướng về trang chủ',
+      description: 'Chuyển hướng về trang trước đó',
       placement: 'top',
       duration: 3,
     });
@@ -69,7 +69,7 @@ const LoginPage = () => {
         openNotification('success');
         setTimeout(() => {
           queryClient.invalidateQueries(['user']);
-          navigate('/');
+          navigate(-1);
         }, 1500);
       })
       .catch((err) => {

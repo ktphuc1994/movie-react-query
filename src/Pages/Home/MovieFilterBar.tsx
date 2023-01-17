@@ -9,29 +9,13 @@ import { InterfaceMovieFilterBarComponent } from '../../core/interface/movies/mo
 import type { Dayjs } from 'dayjs';
 
 // import ANTD Components
-import { Button, DatePicker, Form, Input } from 'antd';
+import { Button, DatePicker, Input } from 'antd';
 const { RangePicker } = DatePicker;
 
-// ANTD Config
+// Filter Category Config
 const dateFormat = TIME_FORMAT_CONST.DAY_MONTH_YEAR_FORMAT;
-const formConfig = {
-  //   labelCol: {
-  //     xs: { span: 24 },
-  //     sm: { span: 8 },
-  //   },
-  //   wrapperCol: {
-  //     xs: { span: 24 },
-  //     sm: { span: 16 },
-  //   },
-  initialValues: {
-    tenPhim: '',
-    ngayKhoiChieuPicker: defaultConst.movieFilterTimeRange,
-  },
-};
-const rangeConfig = {
-  rules: [
-    { type: 'array' as const, required: true, message: 'Please select time!' },
-  ],
+const formItemStyle = {
+  className: 'space-y-1',
 };
 
 const MovieFilterBar = ({
@@ -40,47 +24,70 @@ const MovieFilterBar = ({
 }: InterfaceMovieFilterBarComponent) => {
   const queryClient = useQueryClient();
 
-  const onRangeChange = (dates: null | (Dayjs | null)[], _: string[]) => {
+  const onRangeChange = (
+    dates: null | [Dayjs | null, Dayjs | null],
+    _: [string, string],
+  ) => {
     if (dates) {
       ngayKhoiChieuPickerRef.current = [...dates];
     } else {
-      ngayKhoiChieuPickerRef.current = [...defaultConst.movieFilterTimeRange];
+      ngayKhoiChieuPickerRef.current = [...defaultConst.timeRange];
     }
   };
-  const onFinish = (fieldsValue: any) => {
+  const onFinish = () => {
     // Should format date value before submit.
     queryClient.invalidateQueries(['moviesList']);
   };
 
   return (
-    <Form
-      name="movie_filter_control"
-      {...formConfig}
-      onFinish={onFinish}
-      layout={'inline'}
-      style={{ marginBottom: '20px' }}
-    >
-      <Form.Item name="tenPhim" label="Tên phim">
-        <Input ref={tenPhimRef} />
-      </Form.Item>
-      <Form.Item
-        name="ngayKhoiChieuPicker"
-        label="Ngày khỏi chiếu"
-        {...rangeConfig}
+    <>
+      <div
+        id="movie_filter_control"
+        className="mb-6 grid grid-cols-1 lg:grid-cols-3 lg:gap-6 space-y-4 lg:space-y-0"
       >
-        <RangePicker format={dateFormat} onChange={onRangeChange} />
-      </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          xs: { span: 24, offset: 0 },
-          sm: { span: 16, offset: 8 },
-        }}
-      >
-        <Button danger type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <div {...formItemStyle}>
+          <label htmlFor="tenPhim">Tên phim</label>
+          <Input
+            id="ten-phim-search-input"
+            name="tenPhim"
+            ref={tenPhimRef}
+            defaultValue=""
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                document.getElementById('movie-list-search')?.click();
+              }
+            }}
+          />
+        </div>
+        <div {...formItemStyle}>
+          <label htmlFor="releaseRangePicker">Ngày Khởi Chiếu</label>
+          <RangePicker
+            name="releaseRangePicker"
+            style={{ width: '100%' }}
+            format={dateFormat}
+            onChange={onRangeChange}
+            defaultValue={ngayKhoiChieuPickerRef.current}
+          />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'end',
+          }}
+          {...formItemStyle}
+        >
+          <Button
+            id="movie-list-search"
+            className="w-full lg:w-auto"
+            danger
+            type="primary"
+            onClick={onFinish}
+          >
+            Search
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 

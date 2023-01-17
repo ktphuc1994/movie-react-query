@@ -22,6 +22,7 @@ function App() {
     <ConfigProvider
       theme={{
         algorithm: theme.darkAlgorithm,
+        hashed: false,
       }}
     >
       <LoadingScreen />

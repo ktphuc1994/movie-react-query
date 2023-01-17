@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { AXIOS_INSTANCE_GENERATOR } from './configURL';
 
 // import local constants
@@ -16,6 +15,7 @@ import {
   InterfaceShowtimeAndSeat,
   InterfaceScheduleInfo,
 } from '../interface/booking/booking.interface';
+import defaultConst from '../constants/defaultConst';
 
 const MOVIE_SERV = {
   getTheaterChainList: async (): Promise<InterfaceHeThongRap[]> => {
@@ -32,17 +32,13 @@ const MOVIE_SERV = {
   },
   getMoviesPagination: async ({
     tenPhim,
-    currentPage = '1',
-    itemsPerPage = '999',
+    currentPage,
+    itemsPerPage,
     fromDate,
     toDate,
   }: InterfaceGetMoviePagination): Promise<InterfaceMoviePagination> => {
-    const fromDateSub = dayjs(Date.now() - 1 * 30 * 24 * 60 * 60 * 1000).format(
-      'YYYY-MM-DD',
-    );
-    const toDateSub = dayjs(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).format(
-      'YYYY-MM-DD',
-    );
+    const fromDateSub = defaultConst.timeRange[0].format('YYYY-MM-DD');
+    const toDateSub = defaultConst.timeRange[1].format('YYYY-MM-DD');
     const { data } = await AXIOS_INSTANCE_GENERATOR(
       localConst.BASE_MOVIE_URL(),
     ).get(

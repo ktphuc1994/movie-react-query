@@ -14,5 +14,5 @@ export interface InterfaceMovieListComponent extends InterfaceBaseProps {
 
 export interface InterfaceMovieFilterBarComponent extends InterfaceBaseProps {
   tenPhimRef: RefObject<InputRef>;
-  ngayKhoiChieuPickerRef: MutableRefObject<(Dayjs | null)[]>;
+  ngayKhoiChieuPickerRef: MutableRefObject<[Dayjs | null, Dayjs | null]>;
 }

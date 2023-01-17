@@ -18,7 +18,7 @@ import defaultConst from '../../core/constants/defaultConst';
 
 const HomePage = () => {
   const tenPhimRef = useRef<InputRef>(null);
-  const ngayKhoiChieuPickerRef = useRef<(Dayjs | null)[]>(
+  const ngayKhoiChieuPickerRef = useRef<[Dayjs | null, Dayjs | null]>(
     defaultConst.movieFilterTimeRange,
   );
 
@@ -36,7 +36,7 @@ const HomePage = () => {
     },
     {
       staleTime: 3600000,
-      cacheTime: 3600000,
+      cacheTime: 0,
     },
   );
 
