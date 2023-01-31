@@ -1,4 +1,4 @@
-import { useIsFetching } from '@tanstack/react-query';
+// import { useIsFetching } from '@tanstack/react-query';
 import { ClockLoader } from 'react-spinners';
 
 // import local constant

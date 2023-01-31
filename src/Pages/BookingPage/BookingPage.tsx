@@ -159,20 +159,20 @@ export default function BookingPage() {
   );
 
   return (
-    <div className="container xl:max-w-screen-xl mx-auto pb-10 px-2 sm:px-0">
+    <div className="container xl:max-w-screen-xl mx-auto pb-10 px-3 sm:px-0">
       <h2 className="pb-3 mb-6 border-b-2 text-3xl text-white">Đặt vé</h2>
       {!scheduleInfo ? (
         <InnerSpinner />
       ) : (
-        <div className="movieDetails flex mb-5">
-          <div className="movieDetails__cover w-64 h-80 mr-6 flex-shrink-0">
+        <div className="movieDetails sm:flex mb-5">
+          <div className="movieDetails__cover w-full sm:w-64 h-80 mr-0 sm:mr-6 flex-shrink-0">
             <img
               src={scheduleInfo.hinhAnh}
               alt={scheduleInfo.tenPhim}
               className="object-cover h-full w-full"
             />
           </div>
-          <div className="movieDetails__detail">
+          <div className="movieDetails__detail mt-4 sm:mt-0">
             <div className="flex items-center">
               <p className="mb-0 mr-2 font-bold text-2xl uppercase">
                 {scheduleInfo.tenPhim}

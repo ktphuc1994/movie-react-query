@@ -14,13 +14,14 @@ import type { InputRef } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 // import local constants
-import defaultConst from '../../core/constants/defaultConst';
+// import defaultConst from '../../core/constants/defaultConst';
 
 const HomePage = () => {
   const tenPhimRef = useRef<InputRef>(null);
-  const ngayKhoiChieuPickerRef = useRef<[Dayjs | null, Dayjs | null]>(
-    defaultConst.movieFilterTimeRange,
-  );
+  const ngayKhoiChieuPickerRef = useRef<[Dayjs | null, Dayjs | null]>([
+    null,
+    null,
+  ]);
 
   const {
     isLoading,

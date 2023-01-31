@@ -41,16 +41,18 @@ export default function DetailMovie() {
 
   return (
     <>
-      <iframe
-        width="100%"
-        height="500px"
-        src={getYouTubeLink(movieDetail.trailer)}
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
-      <div className="container xl:max-w-screen-xl mx-auto my-8 px-2 sm:px-0 flex">
-        <div className="movieShortDetails mb-5 mr-4 sm:mr-0 w-1/4 flex-shrink-0">
+      <div className="h-[350px] md:h-[500px]">
+        <iframe
+          width="100%"
+          height="100%"
+          src={getYouTubeLink(movieDetail.trailer)}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+      <div className="container xl:max-w-screen-xl mx-auto my-8 px-3 md:flex">
+        <div className="movieShortDetails mb-4 md:w-1/4 flex-shrink-0">
           <div>
             <p className="mb-0 mr-2 font-bold text-2xl">
               <span className="mr-2">{movieDetail.tenPhim}</span>
@@ -78,13 +80,15 @@ export default function DetailMovie() {
               ĐẶT VÉ NGAY
             </button>
           </NavLink>
-          <p className="mb-2 text-lg">Khởi chiếu:</p>
-          <p className="mb-2 font-bold text-xl">
-            {moment(movieDetail.ngayKhoiChieu).format('MMM DD, YYYY')}
-          </p>
+          <div className="flex md:block">
+            <p className="mr-3 md:mr-0 mb-2 text-lg">Khởi chiếu:</p>
+            <p className="mb-2 font-bold text-xl">
+              {moment(movieDetail.ngayKhoiChieu).format('MMM DD, YYYY')}
+            </p>
+          </div>
         </div>
         <div>
-          <p className="mb-2 text-xl leading-loose text-justify">
+          <p className="mb-2 text-lg md:text-xl leading-normal md:leading-loose text-justify">
             {movieDetail.moTa}
           </p>
         </div>

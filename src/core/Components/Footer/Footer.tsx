@@ -29,7 +29,7 @@ const Footer = () => {
   return (
     <footer className="py-5">
       <hr className="sm:mx-auto border-gray-700" />
-      <div className="xl:max-w-screen-xl container mx-auto pt-8 px-2 sm:px-0 grid grid-cols-2 gap-8 md:grid-cols-3">
+      <div className="xl:max-w-screen-xl container mx-auto pt-8 px-3 grid grid-cols-1 sm:grid-cols-2 gap-8 md:grid-cols-3">
         <div>
           <h2 className="mb-4 text-lg font-semibold text-white uppercase">
             Điều khoản sử dụng
@@ -69,7 +69,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="mb-3 sm:mb-0">
           <h2 className="mb-4 text-lg font-semibold text-white uppercase">
             Đối tác
           </h2>
