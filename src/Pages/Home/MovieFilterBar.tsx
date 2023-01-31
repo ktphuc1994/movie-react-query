@@ -75,6 +75,7 @@ const MovieFilterBar = ({
             onChange={onRangeChange}
             defaultValue={ngayKhoiChieuPickerRef.current}
             panelRender={panelRender}
+            inputReadOnly={true}
           />
         </div>
         <div
