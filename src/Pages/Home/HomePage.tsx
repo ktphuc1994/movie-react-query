@@ -43,7 +43,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="container xl:max-w-screen-xl mx-auto p-5 sm:p-0">
+      <div className="container xl:max-w-screen-xl mx-auto p-5">
         <h3 className="mt-10 font-semibold text-2xl">DANH SÁCH PHIM</h3>
         <MovieFilterBar
           tenPhimRef={tenPhimRef}

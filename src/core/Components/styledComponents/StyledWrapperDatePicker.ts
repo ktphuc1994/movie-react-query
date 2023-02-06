@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyleWrapperDatePicker = styled.div`
   .ant-picker-panel {
-    &:last-child {
+    &:last-child:has(.ant-picker-date-panel) {
       @media (max-width: 640px) {
         width: 0;
         position: absolute;
